@@ -3,10 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/styles/navbar.css" />
     <title>Welcome</title>
   </head>
   <body>
-    <div class="container"><p class="text"></p></div>
+    <div class="navbar">
+      <ul>
+        <div class="panel1"><li class="fa-solid fa-bars sidepanel"></li></div>
+        <div class="logo">
+          <li><a href="index.html">My Restaurent</a></li>
+        </div>
+        <div class="searchbar">
+          <li>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search Food" />
+          </li>
+        </div>
+        <div class="userhelp">
+          <li><a href="#">Cart</a></li>
+          <li><a href="#">Log in</a></li>
+          <li><a href="#">Sign up</a></li>
+        </div>
+      </ul>
+    </div>
+    <div class="main-container">
+      <div class="details-container"></div>
+      <div class="menu-container"></div>
+    </div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script type="module" src="/scripts/index.js"></script>
