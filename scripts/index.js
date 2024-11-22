@@ -1,6 +1,6 @@
 import { baseURL } from "../utils/utils.js";
 
-const text = document.querySelector(".text");
+const text = document.querySelector(".details-container");
 
 async function load() {
   try {
@@ -20,4 +20,4 @@ async function load() {
     console.log(error.message);
   }
 }
-load();
+// load();

@@ -1,2 +1,2 @@
-let baseURL = "https://satyanaam-food-backend.onrender.com";
+let baseURL = "http://localhost:4500";
 export { baseURL };
