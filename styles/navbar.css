@@ -7,12 +7,16 @@ html {
   height: 100%;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  margin-top: 100px;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0px;
   background-color: #333;
   padding: 10px 20px;
   color: white;
