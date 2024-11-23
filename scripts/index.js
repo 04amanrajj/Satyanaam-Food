@@ -1,23 +1,126 @@
 import { baseURL } from "../utils/utils.js";
 
-const text = document.querySelector(".details-container");
-
-async function load() {
+async function restaurent_info() {
   try {
-    const urlParams = new URLSearchParams(window.location.search);
+    const response = await axios.get(baseURL);
+    const restaurantDetails = document.querySelector(".details-container");
 
-    // Convert the URLSearchParams object to a plain object
-    const params = {};
-    urlParams.forEach((value, key) => {
-      params[key] = value;
+    const restaurent = response.data.data.restaurantDetails;
+    restaurantDetails.innerHTML = `
+        <img src="${restaurent.banner || "#"}" alt="banner" />
+        <h1 class="restaurent-name">${restaurent.name}</h1>
+        <p class="restaurent-tagline">${restaurent.tagline}</p>
+        <p class="restaurent-features">Pure Veg - ${
+          restaurent.features.pureVeg
+        }</p>
+        <p class="restaurent-features">Authentic Taste - ${
+          restaurent.features.authenticTaste
+        }</p>
+        <p class="restaurent-features">Home Delivery - ${
+          restaurent.features.homeDeliveryAvailable
+        }</p>
+        Operating Hours
+        <p class="restaurent-operating-hours">Monday to Friday - ${
+          restaurent.operatingHours.mondayToFriday
+        }</p>
+        <p class="restaurent-operating-hours">Weekends - ${
+          restaurent.operatingHours.weekends
+        }</p>
+        <p class="restaurent-location">${restaurent.address.line1}</p>
+        <p class="restaurent-location">${restaurent.address.city}</p>
+        <p class="restaurent-location">${restaurent.address.state}</p>
+        <p class="restaurent-location">${restaurent.address.zipcode}</p>
+        Contacts
+        <p class="restaurent-contact">${restaurent.contact.phone}</p>
+        <p class="restaurent-contact">${restaurent.contact.email}</p>
+    `;
+
+    const menuCategories = response.data.data.menuCategories || [];
+    const categoryRow = document.querySelector(".category-row");
+    categoryRow.innerHTML = menuCategories
+      .map((category) => `<span class="category-item">${category}</span>`)
+      .join(" ");
+
+    const categories = document.querySelectorAll(".category-item");
+    categories.forEach((element) => {
+      element.addEventListener("click", () =>
+        restaurent_menu(element.textContent)
+      );
     });
-
-    const response = await axios.get(`${baseURL}/menu`, { params });
-    const data = await response;
-    text.textContent = JSON.stringify(data.data.data);
-    console.log(data);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 }
-// load();
+
+async function restaurent_menu(name = null) {
+  try {
+    const response = await axios.get(`${baseURL}/menu`, {
+      params: { category: name },
+    });
+    const menuItems = response.data.data || [];
+
+    const itemsDiv = document.querySelector(".menu-container");
+    itemsDiv.innerHTML = ""; // Clear previous menu items
+
+    menuItems.forEach((element) => {
+      // Create menu item container
+      const itemDiv = document.createElement("div");
+      itemDiv.classList.add("item");
+
+      // Add item content
+      itemDiv.innerHTML = `
+        <div class="item-img">
+          <img src="${element.image || "#"}" alt="${element.name}" />
+        </div>
+        <div class="item-details">
+          <h3 class="item-name">${element.name}</h3>
+          <p class="item-description">${element.description}</p>
+          <p class="item-category">${element.category}</p>
+        </div>
+        <div>//add quantity dropdown</div>
+        <div class="cart-box">
+          <button class="cart-button">Add <span class="item-price">Rs.${element.price}</span></button>
+        </div>
+      `;
+
+      // Add event listener to the "Add" button
+      const cartButton = itemDiv.querySelector(".cart-button");
+      cartButton.addEventListener("click", async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          alert("Please log in to add items to the cart.");
+          window.location.href = "../pages/login.html"; // Redirect to login page
+          return;
+        }
+
+        try {
+          const response = await axios.post(
+            `${baseURL}/cart`,
+            { itemid: element._id, quantity: 1 },
+            { headers: { Authorization: token } } // Pass token in the header
+          );
+          alert("Item added to cart!");
+          console.log(response.data);
+        } catch (error) {
+          console.error(error.message);
+          alert(
+            error.response?.data?.message ||
+              "Failed to add item to cart. Try again."
+          );
+        }
+      });
+
+      // Append the item to the container
+      itemsDiv.append(itemDiv);
+    });
+
+    console.log("Menu Items:", menuItems);
+  } catch (error) {
+    console.error("Error fetching menu:", error.message);
+  }
+}
+
+// Initialize restaurant info and menu
+restaurent_info();
+restaurent_menu();
