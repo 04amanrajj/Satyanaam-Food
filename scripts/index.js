@@ -35,6 +35,8 @@ async function restaurent_info() {
         <p class="restaurent-contact">${restaurent.contact.email}</p>
     `;
 
+    // category row
+    response.data.data.menuCategories.unshift("All");
     const menuCategories = response.data.data.menuCategories || [];
     const categoryRow = document.querySelector(".category-row");
     categoryRow.innerHTML = menuCategories
@@ -43,20 +45,23 @@ async function restaurent_info() {
 
     const categories = document.querySelectorAll(".category-item");
     categories.forEach((element) => {
-      element.addEventListener("click", () =>
-        restaurent_menu(element.textContent)
-      );
+      element.addEventListener("click", () => {
+        categories.forEach((el) => el.classList.remove("selected"));
+        element.classList.add("selected");
+        restaurent_menu(element.textContent);
+      });
     });
   } catch (error) {
     console.error(error.message);
   }
 }
 
-async function restaurent_menu(name = null) {
+async function restaurent_menu(name) {
   try {
     const response = await axios.get(`${baseURL}/menu`, {
-      params: { category: name },
+      params: { category: name || null },
     });
+    if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
     const itemsDiv = document.querySelector(".menu-container");
@@ -70,16 +75,17 @@ async function restaurent_menu(name = null) {
       // Add item content
       itemDiv.innerHTML = `
         <div class="item-img">
-          <img src="${element.image || "#"}" alt="${element.name}" />
+          <img src="${!element.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"}" alt="${element.name}" />
         </div>
         <div class="item-details">
           <h3 class="item-name">${element.name}</h3>
           <p class="item-description">${element.description}</p>
           <p class="item-category">${element.category}</p>
         </div>
-        <div>//add quantity dropdown</div>
         <div class="cart-box">
-          <button class="cart-button">Add <span class="item-price">Rs.${element.price}</span></button>
+          <button class="cart-button">Add <span class="item-price">Rs.${
+            element.price
+          }</span></button>
         </div>
       `;
 
