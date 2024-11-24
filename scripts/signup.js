@@ -9,14 +9,15 @@ form.addEventListener("submit", async (e) => {
   // Get input values
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
-  const role = document.getElementById("role").value;
+  const phone = document.getElementById("tel").value;
   const password = document.getElementById("password").value;
-
+  const role = "user";
   try {
     // Send a POST request to the backend
     const response = await axios.post(`${baseURL}/user/register`, {
       name,
       email,
+      phone,
       role,
       password,
     });
