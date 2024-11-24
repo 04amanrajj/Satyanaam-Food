@@ -7,7 +7,6 @@
 
 body {
   font-family: Arial, sans-serif;
-  line-height: 1.6;
   background-color: #f8f9fa;
   color: #333;
   margin: 0;
@@ -73,14 +72,11 @@ hr {
 
 /* Category Row */
 .category-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  text-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none;
 }
 
 .category-item {
@@ -97,6 +93,13 @@ hr {
   background-color: #ff4500;
 }
 
+/* Add styles for the selected category */
+.category-item.selected {
+  background-color: #ff4500;
+  color: #fff;
+}
+
+
 /* Menu and Filter Section */
 .menu-container {
   display: flex;
@@ -104,6 +107,7 @@ hr {
   flex-wrap: wrap;
   justify-content: flex-start;
   margin-top: 20px;
+  transition: all 3ms ease-in-out;
 }
 
 .filter-panel {
@@ -172,7 +176,7 @@ hr {
 
 .item-details {
   padding: 15px;
-  text-align: center;
+  text-align: left;
 }
 
 .item-name {
@@ -197,7 +201,6 @@ hr {
   text-align: center;
   padding: 10px;
   background-color: #f8f8f8;
-  border-top: 1px solid #ddd;
 }
 
 .cart-box button {

@@ -33,7 +33,6 @@ html {
 
 /* Left Section */
 .navbar .panel1 {
-  flex: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -53,14 +52,13 @@ html {
 }
 
 .navbar .searchbar {
-  flex: 3; /* Center section is larger for the search bar */
+  flex: 3;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 }
 
 .navbar .searchbar input[type="text"] {
-  width: 70%; /* Wider search bar */
+  width: 90%; /* Wider search bar */
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
