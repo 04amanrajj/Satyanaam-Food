@@ -13,7 +13,7 @@ body {
 .navbar {
   display: flex;
   align-items: center;
-  position: fixed;
+  position: sticky;
   width: 100%;
   top: 0;
   background-color: #1a1a1a; /* Darker tone for modern look */
@@ -39,17 +39,6 @@ body {
   align-items: center;
 }
 
-.navbar .fa-bars {
-  font-size: 22px;
-  cursor: pointer;
-  color: #f4a261; /* Accent color */
-  transition: color 0.3s ease;
-}
-
-.navbar .fa-bars:hover {
-  color: #ff7733;
-}
-
 /* Center Section */
 .navbar .logo {
   flex: 1;
@@ -60,35 +49,6 @@ body {
 .navbar .logo img {
   height: 40px;
   width: auto;
-}
-
-.navbar .searchbar {
-  flex: 3;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.navbar .searchbar input[type="text"] {
-  width: 100%;
-  max-width: 400px;
-  padding: 8px 16px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  font-size: 14px;
-  outline: none;
-  transition: box-shadow 0.3s ease;
-}
-
-.navbar .searchbar input[type="text"]:focus {
-  box-shadow: 0 0 6px rgba(244, 162, 97, 0.6); /* Highlight on focus */
-}
-
-.navbar .searchbar i {
-  position: absolute;
-  left: 10px;
-  color: #888;
-  font-size: 16px;
 }
 
 /* Right Section */
