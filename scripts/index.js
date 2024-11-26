@@ -7,33 +7,56 @@ async function restaurent_info() {
 
     const restaurent = response.data.data.restaurantDetails;
     restaurantDetails.innerHTML = `
-        <img src="${restaurent.banner || "#"}" alt="banner" />
-        <h1 class="restaurent-name">${restaurent.name}</h1>
-        <p class="restaurent-tagline">${restaurent.tagline}</p>
-        <p class="restaurent-features">Pure Veg - ${
-          restaurent.features.pureVeg
-        }</p>
-        <p class="restaurent-features">Authentic Taste - ${
-          restaurent.features.authenticTaste
-        }</p>
-        <p class="restaurent-features">Home Delivery - ${
-          restaurent.features.homeDeliveryAvailable
-        }</p>
-        Operating Hours
-        <p class="restaurent-operating-hours">Monday to Friday - ${
-          restaurent.operatingHours.mondayToFriday
-        }</p>
-        <p class="restaurent-operating-hours">Weekends - ${
-          restaurent.operatingHours.weekends
-        }</p>
-        <p class="restaurent-location">${restaurent.address.line1}</p>
-        <p class="restaurent-location">${restaurent.address.city}</p>
-        <p class="restaurent-location">${restaurent.address.state}</p>
-        <p class="restaurent-location">${restaurent.address.zipcode}</p>
-        Contacts
-        <p class="restaurent-contact">${restaurent.contact.phone}</p>
-        <p class="restaurent-contact">${restaurent.contact.email}</p>
-    `;
+<div>
+    <p class="restaurant-tagline">${restaurent.tagline}</p>
+  <div class="features">
+    <div class="feature-item">
+      <p class="restaurant-features">Pure Veg</p>
+      <p class="feature-value">${restaurent.features.pureVeg}</p>
+    </div>
+    <div class="feature-item">
+      <p class="restaurant-features">Authentic Taste</p>
+      <p class="feature-value">${restaurent.features.authenticTaste}</p>
+    </div>
+    <div class="feature-item">
+      <p class="restaurant-features">Home Delivery</p>
+      <p class="feature-value">${
+        restaurent.features.homeDeliveryAvailable ? "Available" : "Unavailable"
+      }</p>
+    </div>
+  </div>
+
+  <div class="operating-hours">
+    <h3>Operating Hours</h3>
+    <p class="restaurant-operating-hours">Monday to Friday - ${
+      restaurent.operatingHours.mondayToFriday
+    }</p>
+    <p class="restaurant-operating-hours">Weekends - ${
+      restaurent.operatingHours.weekends
+    }</p>
+  </div>
+
+  <div class="contacts">
+    <h3>Contacts</h3>
+    <p class="restaurant-contact">${restaurent.contact.phone}</p>
+    <p class="restaurant-contact">${restaurent.contact.email}</p>
+  </div>
+</div>
+<div>
+  <div class="map-container">
+    <div id="embed-map-display">
+      <iframe
+        frameborder="0"
+        src="https://www.google.com/maps/embed/v1/place?q=${
+          restaurent.address.line1
+        },${restaurent.address.city},${restaurent.address.state},${
+      restaurent.address.zipcode
+    }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=15"allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+`;
 
     // category row
     response.data.data.menuCategories.unshift("All");
@@ -75,19 +98,44 @@ async function restaurent_menu(name) {
       // Add item content
       itemDiv.innerHTML = `
         <div class="item-img">
-          <img src="${!element.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"}" alt="${element.name}" />
+          <img src="${
+            !element.image ||
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"
+          }" alt="${element.name}" />
         </div>
         <div class="item-details">
-          <h3 class="item-name">${element.name}</h3>
+          <h3 class="item-name">${
+            element.name
+          } <span class="badge rounded-pill text-bg-success">★ ${
+        element.rating
+      }</span></h3>
           <p class="item-description">${element.description}</p>
           <p class="item-category">${element.category}</p>
+          <p class="item-price-old">Price Rs.${
+            (element.price).toFixed(2)
+          } <span class="badge rounded-pill text-bg-primary">-20%</span></p>
+          <p class="item-price">Rs.${((element.price -= element.price * 0.2).toFixed(2))}</p>
         </div>
         <div class="cart-box">
-          <button class="cart-button">Add <span class="item-price">Rs.${
-            element.price
-          }</span></button>
+            <div class="quantity-selector qty mt-5">
+                <button class="minus bg-dark decrease" class="quantity-button">-</button>
+                <input type="number" name="quantity" class="count" id="quantity" value="1" min="1" />
+                <button class="increase plus bg-dark quantity-button">+</button>
+            </div>
+            <button class="cart-button">Add to Cart</button>
         </div>
       `;
+      itemDiv.querySelector(".increase").addEventListener("click", () => {
+        const quantityInput = itemDiv.querySelector(".quantity-selector input");
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+      });
+
+      itemDiv.querySelector(".decrease").addEventListener("click", () => {
+        const quantityInput = itemDiv.querySelector(".quantity-selector input");
+        if (quantityInput.value > 1) {
+          quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+      });
 
       // Add event listener to the "Add" button
       const cartButton = itemDiv.querySelector(".cart-button");
@@ -99,11 +147,14 @@ async function restaurent_menu(name) {
           window.location.href = "../pages/login.html"; // Redirect to login page
           return;
         }
-
+        const quantity = itemDiv.querySelector(
+          ".quantity-selector input"
+        ).value;
+        console.log(quantity);
         try {
           const response = await axios.post(
             `${baseURL}/cart`,
-            { itemid: element._id, quantity: 1 },
+            { itemid: element._id, quantity },
             { headers: { Authorization: token } } // Pass token in the header
           );
           alert("Item added to cart!");
@@ -130,3 +181,9 @@ async function restaurent_menu(name) {
 // Initialize restaurant info and menu
 restaurent_info();
 restaurent_menu();
+
+const scrollButton = document.querySelector(".browse-menu-button");
+scrollButton.addEventListener("click", () => {
+  const nextDiv = document.querySelector(".category-row");
+  nextDiv.scrollIntoView({ behavior: "smooth" });
+});
