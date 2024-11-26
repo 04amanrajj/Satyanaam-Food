@@ -4,6 +4,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: Arial, sans-serif;
@@ -11,231 +14,399 @@ body {
   color: #333;
   margin: 0;
   padding: 0;
+  scroll-behavior: auto;
 }
-
-hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 20px 0;
-}
-
-/* Main Container */
+/* Main container for the page */
 .main-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Details Container */
-.details-container {
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.details-container img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.restaurent-name {
-  font-size: 2rem;
-  color: #1e90ff;
-  margin-bottom: 10px;
-}
-
-.restaurent-tagline {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 20px;
-  font-style: italic;
-}
-
-.restaurent-features {
-  font-size: 1rem;
-  margin-bottom: 5px;
-}
-
-.restaurent-operating-hours,
-.restaurent-location,
-.restaurent-contact {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 5px;
-}
-
-/* Category Row */
-.category-row {
-  padding: 10px 0;
-  text-wrap: nowrap;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  scrollbar-width: none;
-}
-
-.category-item {
-  background-color: #1e90ff;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+  overflow-y: auto;
   color: white;
-  padding: 10px 15px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+}
+
+/* Banner image */
+#myCarousel img {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* Browse Menu Button */
+.browse-menu-button {
+  z-index: 10;
+  position: absolute;
+  left: 50%;
+  bottom: 20%; /* Adjusted to avoid overlap */
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #007bff, #ff4b5c);
+  border: none;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
-.category-item:hover {
-  background-color: #ff4500;
+.browse-menu-button:hover {
+  box-shadow: rgba(var(--primary-color), 1) 0px 0px 20px 0px;
 }
 
-/* Add styles for the selected category */
-.category-item.selected {
-  background-color: #ff4500;
+.browse-menu-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* Details container */
+.details-container {
+  display: flex;
+  grid-gap: 20px;
+  position: relative;
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  background: rgba(0, 0, 0, 0.8); /* Slightly transparent black */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
 
-
-/* Menu and Filter Section */
-.menu-container {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-top: 20px;
-  transition: all 3ms ease-in-out;
+/* Restaurant name */
+.restaurant-name {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-.filter-panel {
-  flex: 0 0 250px;
-  position: sticky;
-  top: 60px;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  align-self: flex-start;
-}
-
-.filter-panel h1 {
-  font-size: 1.5rem;
-  color: #1e90ff;
+/* Tagline */
+.restaurant-tagline {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #f9c74f;
   margin-bottom: 15px;
   text-align: center;
 }
 
-.filter-panel hr {
-  margin: 10px 0;
+/* Features section */
+.features {
+  display: grid;
+  grid-gap: 10px;
 }
 
-.filter-panel h2 {
+/* Feature item */
+.feature-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.restaurant-features {
+  font-weight: bold;
+}
+
+.feature-value {
+  font-weight: normal;
+}
+
+/* Operating hours */
+.operating-hours {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+
+.restaurant-operating-hours {
+  font-size: 1rem;
+  color: #90caf9;
+}
+
+/* Location details */
+.location {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+
+.restaurant-location {
+  font-size: 1rem;
+}
+
+/* Contact details */
+.contacts {
+  display: none;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+
+.restaurant-contact {
+  font-size: 1rem;
+  color: #f48fb1;
+}
+
+/* Header for sections */
+h3 {
+  color: #999;
+  margin-top: 20px;
   font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #555;
+  text-align: left;
+  font-weight: bold;
 }
 
-.filter-panel button {
-  background-color: #f0f0f0;
-  color: #555;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 0.9rem;
-  margin: 5px 0;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* Map Container */
+.map-container {
+  height: 90%;
+  margin-top: 30px;
+  background: linear-gradient(135deg, #007bff, #ff4b5c);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Embed Map */
+#embed-map-display {
   width: 100%;
+  padding: 2px;
+  height: 100%; /* Adjust the height of the map */
+  border-radius: 10px;
 }
 
-.filter-panel button:hover {
-  background-color: #1e90ff;
-  color: white;
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 10px;
 }
 
-/* Menu Items */
-.item {
+/* Optional: Center the map container */
+.map-container {
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  width: calc(33.333% - 20px);
-  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Category row */
+.category-row {
+  display: flex;
+  width: fit-content;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 20px auto;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.3ms ease-in-out;
+}
+
+.category-item {
+  margin: 5px;
+  padding: 8px 12px;
+  background: #333;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-item:hover {
+  background: #555;
+}
+
+.selected {
+  background: linear-gradient(135deg, #007bff, #ff4b5c);
+}
+
+/* Menu items */
+.menu-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+.item {
+  width: 300px;
+  background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+  border-radius: 10px;
+  overflow: auto;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.item * {
+  margin-bottom: 0;
+}
+.item-price-old {
+  
+  color: #999;
+  text-decoration: line-through;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
 }
 
 .item-img img {
   width: 100%;
-  height: 200px;
+  height: auto;
   object-fit: cover;
 }
 
 .item-details {
-  padding: 15px;
   text-align: left;
+  padding: 10px;
+  color: white;
 }
 
 .item-name {
+  color: white;
   font-size: 1.2rem;
-  color: #333;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
 .item-description {
   font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .item-category {
-  font-size: 0.8rem;
-  color: #888;
-  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #90caf9;
 }
 
+/* Add to cart button */
+/* General Cart Box Styling */
 .cart-box {
-  text-align: center;
-  padding: 10px;
-  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
 }
 
-.cart-box button {
-  background-color: #1e90ff;
-  color: white;
+/* Quantity Selector */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+
+
+.quantity-selector button:hover {
+  background-color: #0056b3;
+}
+
+.quantity-selector button:active {
+  background-color: #003f8f;
+}
+
+/* Quantity Input */
+.quantity-selector input[type="number"] {
+  width: 40px;
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Add to Cart Button */
+.cart-button {
+  background-color: #28a745;
+  color: #fff;
   border: none;
   border-radius: 5px;
+  font-size: 16px;
   padding: 10px 20px;
-  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.cart-box button:hover {
-  background-color: #ff4500;
+.cart-button:hover {
+  background-color: #218838;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 1024px) {
-  .item {
-    width: calc(50% - 20px);
-  }
-
-  .filter-panel {
-    flex: 1 1 100%;
-    position: static;
-  }
+.cart-button:active {
+  background-color: #1e7e34;
 }
 
-@media (max-width: 768px) {
-  .item {
-    width: 100%;
-  }
 
-  .category-row {
-    flex-wrap: wrap;
+.cart-box {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
+.cart-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #28a745, #218838);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+:root {
+  --primary-color: 111, 76, 255;
+}
+.cart-button:hover {
+  box-shadow: #28a745 0px 0px 20px 0px;
+}
+
+.cart-button:active {
+  transform: scale(0.95);
+}
+
+/* Pagination (future-proofing if needed) */
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+
+
+.qty .count {
+  color: #000;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 30px;
+  padding: 0 2px
+  ;min-width: 35px;
+  text-align: center;
+}
+.qty .plus {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+  color: white;
+  width: 30px;
+  height: 30px;
+  font: 30px/1 Arial,sans-serif;
+  text-align: center;
+  border-radius: 50%;
   }
+.qty .minus {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+  color: white;
+  width: 30px;
+  height: 30px;
+  font: 30px/1 Arial,sans-serif;
+  text-align: center;
+  border-radius: 50%;
+  background-clip: padding-box;
 }

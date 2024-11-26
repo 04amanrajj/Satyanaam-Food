@@ -1,68 +1,94 @@
 /* General Styles */
-body,
-html {
+body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif; /* Updated font */
   box-sizing: border-box;
   margin-top: 100px;
+  background-color: #f9f9f9;
 }
 
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   position: fixed;
   width: 100%;
-  top: 0px;
-  background-color: #333;
-  padding: 10px 20px;
+  top: 0;
+  background-color: #1a1a1a; /* Darker tone for modern look */
+  padding: 12px 20px;
   color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
 
 .navbar ul {
   display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
   align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 /* Left Section */
 .navbar .panel1 {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
 }
 
-.fa-bars {
-  font-size: 20px;
+.navbar .fa-bars {
+  font-size: 22px;
   cursor: pointer;
+  color: #f4a261; /* Accent color */
+  transition: color 0.3s ease;
+}
+
+.navbar .fa-bars:hover {
+  color: #ff7733;
 }
 
 /* Center Section */
 .navbar .logo {
   flex: 1;
   display: flex;
-  justify-content: center;
   align-items: center;
+}
+
+.navbar .logo img {
+  height: 40px;
+  width: auto;
 }
 
 .navbar .searchbar {
   flex: 3;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .navbar .searchbar input[type="text"] {
-  width: 90%; /* Wider search bar */
-  padding: 8px 12px;
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 16px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 20px;
   font-size: 14px;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.navbar .searchbar input[type="text"]:focus {
+  box-shadow: 0 0 6px rgba(244, 162, 97, 0.6); /* Highlight on focus */
+}
+
+.navbar .searchbar i {
+  position: absolute;
+  left: 10px;
+  color: #888;
+  font-size: 16px;
 }
 
 /* Right Section */
@@ -77,15 +103,45 @@ html {
   color: white;
   text-decoration: none;
   font-size: 14px;
-  margin: 0 10px;
+  margin: 0 15px;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .navbar a:hover {
-  color: #f4a261;
+  color: #f4a261; /* Matches hover effect of icons */
 }
 
 .navbar i {
   margin-right: 8px;
   font-size: 16px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 8px 16px;
+  }
+
+  .navbar .searchbar input[type="text"] {
+    max-width: 250px; /* Smaller width for mobile */
+  }
+
+  .navbar ul {
+    flex-wrap: wrap;
+  }
+
+  .navbar .userhelp {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .navbar .searchbar {
+    order: 2; /* Moves searchbar below logo for better alignment */
+    margin-top: 10px;
+  }
+
+  .navbar .logo {
+    order: 1; /* Keeps logo on top for smaller screens */
+  }
 }
