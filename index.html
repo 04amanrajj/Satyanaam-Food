@@ -72,11 +72,6 @@
             /></a>
           </li>
         </div>
-        <div class="searchbar">
-          <li>
-            <input type="text" placeholder="Search Food" />
-          </li>
-        </div>
         <div class="userhelp">
           <li><a href="#">Cart</a></li>
           <li><a href="/pages/login.html">Log in</a></li>
@@ -119,20 +114,42 @@
         </button>
       </div>
 
-      <div class="main-banner-div"></div>
       <div class="details-container"></div>
-      <div class="category-row">category--------------------</div>
-      <!-- <div class="filter-panel">
-        <h1>Filter</h1>
-        <hr />
-        <h2>Price Range</h2>
-        <button>$</button>
-        <button>$$</button>
-        <button>$$$</button>
-        <button>$$$$</button>
-      </div> -->
+      <div class="category-row"></div>
+      <div class="filter-row">
+        <!-- Sort By Dropdown -->
+        <div class="filter-item">
+          <div class="dropdown">
+            <div class="dropdown-label">Sort By</div>
+          </div>
+        </div>
+
+        <!-- Fast Delivery -->
+        <div class="filter-item">
+          <div class="toggle-button">
+            <div class="toggle-label">Fast Delivery</div>
+          </div>
+        </div>
+
+        <!-- Pure Veg -->
+        <div class="filter-item">
+          <div class="toggle-button">
+            <div class="toggle-label">Pure Veg</div>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-item">
+          <div class="toggle-button">
+            <div class="toggle-label">Rs. 300-Rs. 600</div>
+          </div>
+        </div>
+        <div class="searchbar">
+          <input type="text" id="food-search" placeholder="🔍Search Food" />
+        </div>
+      </div>
       <div class="menu-container"></div>
-      <div class="pagination"></div>
+      <div class="pagination-box"></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script

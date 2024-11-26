@@ -71,19 +71,25 @@ async function restaurent_info() {
       element.addEventListener("click", () => {
         categories.forEach((el) => el.classList.remove("selected"));
         element.classList.add("selected");
-        restaurent_menu(element.textContent);
+        restaurent_menu(1, element.textContent);
       });
     });
   } catch (error) {
     console.error(error.message);
   }
 }
-
-async function restaurent_menu(name) {
+let currentPage = 1;
+let totalPage;
+async function restaurent_menu(pagenumber, name, q) {
   try {
-    const response = await axios.get(`${baseURL}/menu`, {
-      params: { category: name || null },
-    });
+    const response = await axios.get(
+      `${baseURL}/menu?page=${pagenumber || 1}`,
+      {
+        params: { category: name || null, q },
+      }
+    );
+    currentPage = response.data.extra.currentPage;
+    totalPage = response.data.extra.totalPages;
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
@@ -91,99 +97,122 @@ async function restaurent_menu(name) {
     itemsDiv.innerHTML = ""; // Clear previous menu items
 
     menuItems.forEach((element) => {
-      // Create menu item container
       const itemDiv = document.createElement("div");
       itemDiv.classList.add("item");
 
-      // Add item content
       itemDiv.innerHTML = `
         <div class="item-img">
-          <img src="${
-            !element.image ||
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"
-          }" alt="${element.name}" />
+          <img src="${"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"}" alt="${
+        element.name
+      }" />
         </div>
         <div class="item-details">
-          <h3 class="item-name">${
-            element.name
-          } <span class="badge rounded-pill text-bg-success">★ ${
-        element.rating
-      }</span></h3>
+          <h3 class="item-name">${element.name} 
+            <span class="badge rounded-pill text-bg-success">★ ${
+              element.rating
+            }</span>
+          </h3>
           <p class="item-description">${element.description}</p>
-          <p class="item-category">${element.category}</p>
-          <p class="item-price-old">Price Rs.${
-            (element.price).toFixed(2)
-          } <span class="badge rounded-pill text-bg-primary">-20%</span></p>
-          <p class="item-price">Rs.${((element.price -= element.price * 0.2).toFixed(2))}</p>
+          <p class="item-price">Price: Rs.${(element.price * 0.8).toFixed(
+            2
+          )}</p>
         </div>
         <div class="cart-box">
-            <div class="quantity-selector qty mt-5">
-                <button class="minus bg-dark decrease" class="quantity-button">-</button>
-                <input type="number" name="quantity" class="count" id="quantity" value="1" min="1" />
-                <button class="increase plus bg-dark quantity-button">+</button>
-            </div>
-            <button class="cart-button">Add to Cart</button>
+        <div class="quantity-selector">
+        <button class="minus bg-dark decrease"><i class="fa-solid fa-caret-down"></i></button>
+        <input type="number" class="count" value="1" min="1" />
+        <button class="increase bg-dark"><i class="fa-solid fa-caret-up"></i></i></button>
+        </div>
+        <button class="btn-glow cart-button">Add to Cart</button>
         </div>
       `;
-      itemDiv.querySelector(".increase").addEventListener("click", () => {
-        const quantityInput = itemDiv.querySelector(".quantity-selector input");
+
+      // Elements
+      const cartButton = itemDiv.querySelector(".cart-button");
+      const quantitySelector = itemDiv.querySelector(".quantity-selector");
+      const increaseButton = itemDiv.querySelector(".increase");
+      const decreaseButton = itemDiv.querySelector(".decrease");
+      const quantityInput = itemDiv.querySelector(".count");
+
+      // Increase Button Click
+      increaseButton.addEventListener("click", () => {
         quantityInput.value = parseInt(quantityInput.value) + 1;
       });
 
-      itemDiv.querySelector(".decrease").addEventListener("click", () => {
-        const quantityInput = itemDiv.querySelector(".quantity-selector input");
+      // Decrease Button Click
+      decreaseButton.addEventListener("click", () => {
         if (quantityInput.value > 1) {
           quantityInput.value = parseInt(quantityInput.value) - 1;
         }
       });
 
-      // Add event listener to the "Add" button
-      const cartButton = itemDiv.querySelector(".cart-button");
+      // Add to Cart Button Click
       cartButton.addEventListener("click", async () => {
         const token = localStorage.getItem("token");
-
         if (!token) {
           alert("Please log in to add items to the cart.");
-          window.location.href = "../pages/login.html"; // Redirect to login page
+          window.location.href = "../pages/login.html";
           return;
         }
-        const quantity = itemDiv.querySelector(
-          ".quantity-selector input"
-        ).value;
-        console.log(quantity);
+
         try {
           const response = await axios.post(
             `${baseURL}/cart`,
-            { itemid: element._id, quantity },
-            { headers: { Authorization: token } } // Pass token in the header
+            { itemid: element._id, quantity: +quantityInput.value },
+            { headers: { Authorization: token } }
           );
-          alert("Item added to cart!");
           console.log(response.data);
         } catch (error) {
-          console.error(error.message);
-          alert(
-            error.response?.data?.message ||
-              "Failed to add item to cart. Try again."
-          );
+          console.error("Error adding to cart:", error);
+          alert(error.response?.data?.message);
         }
       });
 
-      // Append the item to the container
       itemsDiv.append(itemDiv);
     });
 
     console.log("Menu Items:", menuItems);
   } catch (error) {
-    console.error("Error fetching menu:", error.message);
+    console.error(error.message);
+    alert(error.response?.data?.message);
   }
 }
 
-// Initialize restaurant info and menu
-restaurent_info();
-restaurent_menu();
+const paginationDiv = document.querySelector(".pagination-box");
+paginationDiv.innerHTML = `
+        <ul class="pagination">
+          <li class="last ">
+            <a class="last-page fa fa-arrow-left"></a>
+          </li>
+          <li class="next">
+            <a class="next-page fa fa-arrow-right"></a>
+          </li>
+        </ul>
+`;
+const nextPage = paginationDiv.querySelector(".next-page");
+nextPage.addEventListener("click", () => {
+  ++currentPage;
+  restaurent_menu(currentPage);
+});
+
+const lastPage = paginationDiv.querySelector(".last-page");
+lastPage.addEventListener("click", () => {
+  --currentPage;
+  restaurent_menu(currentPage);
+});
 
 const scrollButton = document.querySelector(".browse-menu-button");
 scrollButton.addEventListener("click", () => {
   const nextDiv = document.querySelector(".category-row");
   nextDiv.scrollIntoView({ behavior: "smooth" });
 });
+
+const search = document.querySelector("#food-search");
+search.addEventListener("input", () => {
+  let value = document.querySelector("#food-search").value;
+  restaurent_menu(1, null, value);
+});
+
+// Initialize restaurant info and menu
+restaurent_info();
+restaurent_menu();
