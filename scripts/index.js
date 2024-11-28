@@ -1,5 +1,5 @@
-import { baseURL } from "../utils/utils.js";
-
+import { baseURL, page_footer, cover_page } from "../utils/utils.js";
+let filters = {};
 async function restaurent_info() {
   try {
     const response = await axios.get(baseURL);
@@ -8,7 +8,7 @@ async function restaurent_info() {
     const restaurent = response.data.data.restaurantDetails;
     restaurantDetails.innerHTML = `
 <div>
-    <p class="restaurant-tagline">${restaurent.tagline}</p>
+    <p class="restaurant-features operating-hours"><h3>Restaurant Features</h3></p>
   <div class="features">
     <div class="feature-item">
       <p class="restaurant-features">Pure Veg</p>
@@ -51,7 +51,7 @@ async function restaurent_info() {
           restaurent.address.line1
         },${restaurent.address.city},${restaurent.address.state},${
       restaurent.address.zipcode
-    }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=15"allowfullscreen>
+    }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=19"allowfullscreen>
       </iframe>
     </div>
   </div>
@@ -66,13 +66,68 @@ async function restaurent_info() {
       .map((category) => `<span class="category-item">${category}</span>`)
       .join(" ");
 
+    document
+      .querySelector(".category-row > span")
+      .classList.add("categoryselected");
     const categories = document.querySelectorAll(".category-item");
     categories.forEach((element) => {
       element.addEventListener("click", () => {
-        categories.forEach((el) => el.classList.remove("selected"));
-        element.classList.add("selected");
-        restaurent_menu(1, element.textContent);
+        categories.forEach((el) => el.classList.remove("categoryselected"));
+        element.classList.add("categoryselected");
+        restaurent_menu(1, { category: element.textContent });
       });
+    });
+
+    // filter row
+    const sortbyLTH = document.querySelector(".lowtohigh");
+    sortbyLTH.addEventListener("click", () => {
+      const sortby = document.querySelector(".sortby");
+      sortby.classList.add("selected");
+      filters = { ...filters, price: 1 };
+      restaurent_menu(1, filters);
+    });
+
+    const sortbyHTL = document.querySelector(".hightolow");
+    sortbyHTL.addEventListener("click", () => {
+      const sortby = document.querySelector(".sortby");
+      sortby.classList.add("selected");
+      filters = { ...filters, price: -1 };
+      restaurent_menu(1, filters);
+    });
+
+    const ratingFilter = document.querySelector(".ratingFilter");
+    ratingFilter.addEventListener("click", () => {
+      ratingFilter.classList.add("selected");
+      filters = { ...filters, rating: 4.5 };
+      restaurent_menu(1, filters);
+    });
+
+    const priceBetween = document.querySelector(".pricebetween");
+    priceBetween.addEventListener("click", () => {
+      priceBetween.classList.add("selected");
+      document.querySelector(".pricelessthan").classList.remove("selected");
+      filters = { ...filters, minprice: 150, maxprice: 300 };
+      restaurent_menu(1, filters);
+    });
+
+    const lessThan = document.querySelector(".pricelessthan");
+    lessThan.addEventListener("click", () => {
+      lessThan.classList.add("selected");
+      delete filters.minprice;
+      priceBetween.classList.remove("selected");
+      filters = { ...filters, maxprice: 150 };
+      restaurent_menu(1, filters);
+    });
+
+    const resetFilter = document.querySelector(".reset-item");
+    resetFilter.addEventListener("click", () => {
+      Object.keys(filters).forEach((key) => {
+        delete filters[key];
+      });
+      resetFilter.style.display = "none";
+      const filterBox = document.querySelectorAll(".filter-item");
+      filterBox.forEach((el) => el.classList.remove("selected"));
+      restaurent_menu();
     });
   } catch (error) {
     console.error(error.message);
@@ -80,14 +135,17 @@ async function restaurent_info() {
 }
 let currentPage = 1;
 let totalPage;
-async function restaurent_menu(pagenumber, name, q) {
+async function restaurent_menu(pagenumber = 1, params = {}) {
   try {
-    const response = await axios.get(
-      `${baseURL}/menu?page=${pagenumber || 1}`,
-      {
-        params: { category: name || null, q },
-      }
-    );
+    console.log(Object.keys(filters).length != 0);
+    if (Object.keys(filters).length != 0) {
+      const resetFilter = document.querySelector(".reset-item");
+      resetFilter.style.display = "flex";
+    }
+    const finalFilters = { ...filters, ...params };
+    const response = await axios.get(`${baseURL}/menu?page=${pagenumber}`, {
+      params: finalFilters,
+    });
     currentPage = response.data.extra.currentPage;
     totalPage = response.data.extra.totalPages;
     if (response.data.data.length == 0) restaurent_menu();
@@ -112,10 +170,12 @@ async function restaurent_menu(pagenumber, name, q) {
               element.rating
             }</span>
           </h3>
-          <p class="item-description">${element.description}</p>
-          <p class="item-price">Price: Rs.${(element.price * 0.8).toFixed(
-            2
-          )}</p>
+          <p class="item-description">${
+            element.description
+          }</p><p class="item-og-price" style="color: #999;text-decoration: line-through;">Rs.${element.price.toFixed(
+        2
+      )} <span class="badge rounded-pill text-bg-warning">20% off</span></p>
+          <p class="item-price">Rs.${(element.price * 0.8).toFixed(2)}</p>
         </div>
         <div class="cart-box">
         <div class="quantity-selector">
@@ -172,6 +232,11 @@ async function restaurent_menu(pagenumber, name, q) {
     });
 
     console.log("Menu Items:", menuItems);
+
+    if (menuItems.length == 0) {
+      const categories = document.querySelectorAll(".category-item");
+      categories.forEach((el) => el.classList.remove("categoryselected"));
+    }
   } catch (error) {
     console.error(error.message);
     alert(error.response?.data?.message);
@@ -210,9 +275,12 @@ scrollButton.addEventListener("click", () => {
 const search = document.querySelector("#food-search");
 search.addEventListener("input", () => {
   let value = document.querySelector("#food-search").value;
-  restaurent_menu(1, null, value);
+  filters = { ...filters, q: value };
+  restaurent_menu(1, filters);
 });
 
 // Initialize restaurant info and menu
+cover_page();
 restaurent_info();
 restaurent_menu();
+page_footer();
