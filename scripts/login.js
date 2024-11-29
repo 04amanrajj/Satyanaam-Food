@@ -1,4 +1,4 @@
-import { baseURL } from "../utils/utils.js";
+import { baseURL, navbar } from "../utils/utils.js";
 const form = document.getElementById("loginForm");
 const errorMessage = document.getElementById("error-message");
 
@@ -49,3 +49,4 @@ form.addEventListener("submit", async (e) => {
     submitButton.textContent = "Login";
   }
 });
+navbar()

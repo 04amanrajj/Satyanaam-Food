@@ -1,4 +1,4 @@
-import { baseURL } from "../utils/utils.js";
+import { baseURL, navbar } from "../utils/utils.js";
 
 const form = document.getElementById("signupForm");
 const errorMessage = document.getElementById("error-message");
@@ -40,3 +40,4 @@ form.addEventListener("submit", async (e) => {
     errorMessage.style.display = "block";
   }
 });
+navbar()
