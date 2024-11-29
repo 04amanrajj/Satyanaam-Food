@@ -1,4 +1,4 @@
-import { baseURL, page_footer, cover_page } from "../utils/utils.js";
+import { baseURL, page_footer, cover_page, navbar } from "../utils/utils.js";
 let filters = {};
 async function restaurent_info() {
   try {
@@ -137,7 +137,6 @@ let currentPage = 1;
 let totalPage;
 async function restaurent_menu(pagenumber = 1, params = {}) {
   try {
-    console.log(Object.keys(filters).length != 0);
     if (Object.keys(filters).length != 0) {
       const resetFilter = document.querySelector(".reset-item");
       resetFilter.style.display = "flex";
@@ -280,6 +279,7 @@ search.addEventListener("input", () => {
 });
 
 // Initialize restaurant info and menu
+navbar();
 cover_page();
 restaurent_info();
 restaurent_menu();
