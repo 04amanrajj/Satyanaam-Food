@@ -16,7 +16,7 @@ body {
   font-family: ProximaNova, arial, Helvetica Neue, sans-serif;
   background-color: #f8f9fa;
   color: #333;
-  height: 100vh;
+  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -34,7 +34,16 @@ body {
   position: relative;
   width: 100%;
   height: 100vh;
-  object-fit:fill;
+  object-fit: fill;
+
+  -webkit-mask-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 2), rgba(0, 0, 0, 0));
 }
 
 .cover-page h1 {
@@ -46,7 +55,7 @@ body {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-family: "Playfair Display", serif;
+  font-family: "Merienda One", sans-serif;
   font-weight: bolder;
 
   -webkit-text-stroke-width: 1px;
@@ -93,12 +102,19 @@ body {
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background: linear-gradient(135deg, #007bff, #ff4b5c);
+  background: linear-gradient(
+    90deg,
+    #007bff,
+    #ff4b5c
+  ); /* Gradient from left to right */
+  background-size: 200% 100%; /* Make the gradient larger to allow sliding effect */
+  background-position: 100% 0; /* Start with the gradient on the right */
   border: none;
   border-radius: 25px;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+  animation: colorSlide 3s ease-in-out infinite; /* Continuous right to left sliding effect */
 }
 
 .browse-menu-button:hover {
@@ -107,6 +123,19 @@ body {
 
 .browse-menu-button:active {
   transform: translateX(-50%) scale(0.95);
+}
+
+/* Right to left gradient slide animation */
+@keyframes colorSlide {
+  0% {
+    background-position: 100% 0; /* Start gradient from the right */
+  }
+  50% {
+    background-position: 0% 0; /* Slide the gradient to the left */
+  }
+  100% {
+    background-position: 100% 0; /* End the gradient at the right */
+  }
 }
 
 /* Details container */
@@ -373,6 +402,9 @@ iframe {
 }
 
 .item-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.9rem;
   margin-bottom: 5px;
 }
@@ -502,7 +534,7 @@ footer .btn-lg {
   height: min-content;
   width: min-content;
 }
-.bg-darkk{
+.bg-darkk {
   background-color: #222;
 }
 
