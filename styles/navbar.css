@@ -1,107 +1,134 @@
-/* General Styles */
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
+.form-inline {
+  display: inline-block;
+}
+
+.nav img {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  margin: -8px 0;
+  float: left;
+  margin-right: 10px;
+}
+.navbar .navbar-brand {
+  padding-left: 0;
+  padding-right: 50px;
+  font-family: "Merienda One", sans-serif;
+}
+.navbar .navbar-brand i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+.search-box {
+  position: relative;
+}
+.search-box input {
+  box-shadow: none;
+  padding-right: 35px;
+  border-radius: 3px !important;
+}
+.search-box .input-group-addon {
+  min-width: 35px;
+  border: none;
+  background: transparent;
+  position: absolute;
+  right: 0;
+  z-index: 9;
+  padding: 7px;
   height: 100%;
-  font-family: 'Roboto', Arial, sans-serif; /* Updated font */
-  box-sizing: border-box;
-  margin-top: 100px;
-  background-color: #f9f9f9;
 }
-
-.navbar {
-  display: flex;
-  align-items: center;
-  position: sticky;
-  width: 100%;
-  top: 0;
-  background-color: #1a1a1a; /* Darker tone for modern look */
-  padding: 12px 20px;
-  color: white;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+.search-box i {
+  color: #a0a5b1;
+  font-size: 19px;
 }
-
-.navbar ul {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  list-style: none;
-  width: 100%;
-  padding: 0;
-  margin: 0;
+.navbar ul li i {
+  font-size: 18px;
 }
-
-/* Left Section */
-.navbar .panel1 {
-  display: flex;
-  align-items: center;
-}
-
-/* Center Section */
-.navbar .logo {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.navbar .logo img {
-  height: 40px;
-  width: auto;
-}
-
-/* Right Section */
-.navbar .userhelp {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  margin: 0 15px;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.navbar a:hover {
-  color: #f4a261; /* Matches hover effect of icons */
-}
-
-.navbar i {
-  margin-right: 8px;
+.navbar .dropdown-menu i {
   font-size: 16px;
+  min-width: 22px;
+}
+.navbar .dropdown.open > a {
+  background: none !important;
+}
+.navbar .dropdown-menu {
+  border-radius: 1px;
+  border-color: #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.navbar .dropdown-menu li a {
+  color: #777 !important;
+  padding: 8px 20px;
+  line-height: normal;
+}
+.navbar .dropdown-menu li a:hover,
+.navbar .dropdown-menu li a:active {
+  color: #333;
+}
+.navbar .dropdown-menu .material-icons {
+  font-size: 21px;
+  line-height: 16px;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+.navbar .badge {
+  background: #f44336;
+  font-size: 11px;
+  border-radius: 20px;
+  position: absolute;
+  min-width: 10px;
+  padding: 4px 6px 0;
+  min-height: 18px;
+  top: 5px;
+}
+.navbar ul.nav li a.notifications,
+.navbar ul.nav li a.messages {
+  position: relative;
+  margin-right: 10px;
+}
+.navbar ul.nav li a.messages {
+  margin-right: 20px;
+}
+.navbar a.notifications .badge {
+  margin-left: -8px;
+}
+.navbar a.messages .badge {
+  margin-left: -4px;
+}
+.navbar .active a,
+.navbar .active a:hover,
+.navbar .active a:focus {
+  background: transparent !important;
+}
+.navbar {
+  background-color: rgba(0, 0, 0, 0.253);
+  padding-left: 16px;
+  padding-right: 16px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-  .navbar {
-    padding: 8px 16px;
+.navbar-nav .nav-item{
+  margin-left: 10px;
+}
+.navbar a,
+.navbar p,
+.navbar span,
+.navbar label {
+  color: white !important; /* Enforce white text for common elements */
+}
+@media (min-width: 1200px) {
+  .form-inline .input-group {
+    width: 300px;
+    margin-left: 30px;
   }
-
-  .navbar .searchbar input[type="text"] {
-    max-width: 250px; /* Smaller width for mobile */
+}
+@media (max-width: 1199px) {
+  .form-inline {
+    display: block;
+    margin-bottom: 10px;
   }
-
-  .navbar ul {
-    flex-wrap: wrap;
-  }
-
-  .navbar .userhelp {
-    margin-top: 10px;
-    justify-content: center;
-  }
-
-  .navbar .searchbar {
-    order: 2; /* Moves searchbar below logo for better alignment */
-    margin-top: 10px;
-  }
-
-  .navbar .logo {
-    order: 1; /* Keeps logo on top for smaller screens */
+  .input-group {
+    width: 100%;
   }
 }
