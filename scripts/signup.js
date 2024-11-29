@@ -4,15 +4,21 @@ const form = document.getElementById("signupForm");
 const errorMessage = document.getElementById("error-message");
 
 form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  // Get input values
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("tel").value;
-  const password = document.getElementById("password").value;
-  const role = "user";
   try {
+    e.preventDefault();
+
+    // Get input values
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("tel").value;
+    const password = document.getElementById("password").value;
+    const samePassword = document.getElementById("samepassword").value;
+
+    if (password !== samePassword) {
+      errorMessage.style.display = "block";
+      return (errorMessage.textContent = "Password didn't match");
+    }
+    const role = "user";
     // Send a POST request to the backend
     const response = await axios.post(`${baseURL}/user/register`, {
       name,
