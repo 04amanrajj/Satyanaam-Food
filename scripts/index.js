@@ -145,8 +145,8 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     const response = await axios.get(`${baseURL}/menu?page=${pagenumber}`, {
       params: finalFilters,
     });
-    currentPage = response.data.extra.currentPage;
-    totalPage = response.data.extra.totalPages;
+    currentPage = response.data.metadata.currentPage;
+    totalPage = response.data.metadata.totalPages;
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
@@ -169,41 +169,22 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
               element.rating
             }</span>
           </h3>
-          <p class="item-description">${
+          <p class="item-description" data-bs-toggle="tooltip" data-bs-title="Default tooltip"><abbr title="${
             element.description
-          }</p><p class="item-og-price" style="color: #999;text-decoration: line-through;">Rs.${element.price.toFixed(
+          }">${
+        element.description
+      }</abbr></p><p class="item-og-price" style="color: #999;text-decoration: line-through;">Rs.${element.price.toFixed(
         2
       )} <span class="badge rounded-pill text-bg-warning">20% off</span></p>
           <p class="item-price">Rs.${(element.price * 0.8).toFixed(2)}</p>
         </div>
         <div class="cart-box">
-        <div class="quantity-selector">
-        <button class="minus bg-dark decrease"><i class="fa-solid fa-caret-down"></i></button>
-        <input type="number" class="count" value="1" min="1" />
-        <button class="increase bg-dark"><i class="fa-solid fa-caret-up"></i></i></button>
-        </div>
         <button class="btn-glow cart-button">Add to Cart</button>
         </div>
       `;
 
       // Elements
       const cartButton = itemDiv.querySelector(".cart-button");
-      const quantitySelector = itemDiv.querySelector(".quantity-selector");
-      const increaseButton = itemDiv.querySelector(".increase");
-      const decreaseButton = itemDiv.querySelector(".decrease");
-      const quantityInput = itemDiv.querySelector(".count");
-
-      // Increase Button Click
-      increaseButton.addEventListener("click", () => {
-        quantityInput.value = parseInt(quantityInput.value) + 1;
-      });
-
-      // Decrease Button Click
-      decreaseButton.addEventListener("click", () => {
-        if (quantityInput.value > 1) {
-          quantityInput.value = parseInt(quantityInput.value) - 1;
-        }
-      });
 
       // Add to Cart Button Click
       cartButton.addEventListener("click", async () => {
@@ -217,7 +198,7 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
         try {
           const response = await axios.post(
             `${baseURL}/cart`,
-            { itemid: element._id, quantity: +quantityInput.value },
+            { itemid: element._id, quantity: 1 },
             { headers: { Authorization: token } }
           );
           console.log(response.data);
@@ -241,29 +222,6 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     alert(error.response?.data?.message);
   }
 }
-
-const paginationDiv = document.querySelector(".pagination-box");
-paginationDiv.innerHTML = `
-        <ul class="pagination">
-          <li class="last ">
-            <a class="last-page fa fa-arrow-left"></a>
-          </li>
-          <li class="next">
-            <a class="next-page fa fa-arrow-right"></a>
-          </li>
-        </ul>
-`;
-const nextPage = paginationDiv.querySelector(".next-page");
-nextPage.addEventListener("click", () => {
-  ++currentPage;
-  restaurent_menu(currentPage);
-});
-
-const lastPage = paginationDiv.querySelector(".last-page");
-lastPage.addEventListener("click", () => {
-  --currentPage;
-  restaurent_menu(currentPage);
-});
 
 const scrollButton = document.querySelector(".browse-menu-button");
 scrollButton.addEventListener("click", () => {
