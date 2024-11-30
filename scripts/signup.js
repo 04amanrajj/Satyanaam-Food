@@ -14,6 +14,11 @@ form.addEventListener("submit", async (e) => {
     const password = document.getElementById("password").value;
     const samePassword = document.getElementById("samepassword").value;
 
+    if (password.length < 8) {
+      errorMessage.style.display = "block";
+      return (errorMessage.textContent =
+        "Password must be at least 8 characters long");
+    }
     if (password !== samePassword) {
       errorMessage.style.display = "block";
       return (errorMessage.textContent = "Password didn't match");
@@ -40,4 +45,4 @@ form.addEventListener("submit", async (e) => {
     errorMessage.style.display = "block";
   }
 });
-navbar()
+navbar();
