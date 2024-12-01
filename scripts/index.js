@@ -1,4 +1,11 @@
-import { baseURL, page_footer, cover_page, navbar } from "../utils/utils.js";
+import {
+  baseURL,
+  page_footer,
+  cover_page,
+  navbar,
+  tostTopEnd,
+  tostBottomEnd,
+} from "../utils/utils.js";
 let filters = {};
 async function restaurent_info() {
   try {
@@ -130,11 +137,12 @@ async function restaurent_info() {
       restaurent_menu();
     });
   } catch (error) {
-    console.error(error.message);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.message,
+    });
   }
 }
-let currentPage = 1;
-let totalPage;
 async function restaurent_menu(pagenumber = 1, params = {}) {
   try {
     if (Object.keys(filters).length != 0) {
@@ -145,8 +153,6 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     const response = await axios.get(`${baseURL}/menu?page=${pagenumber}`, {
       params: finalFilters,
     });
-    currentPage = response.data.metadata.currentPage;
-    totalPage = response.data.metadata.totalPages;
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
@@ -156,12 +162,11 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     menuItems.forEach((element) => {
       const itemDiv = document.createElement("div");
       itemDiv.classList.add("item");
-
       itemDiv.innerHTML = `
         <div class="item-img">
-          <img src="${"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"}" alt="${
+          <img src="${element.image||"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"}" alt="${
         element.name
-      }" />
+      }" width="300px" height="300px"/>
         </div>
         <div class="item-details">
           <h3 class="item-name">${element.name} 
@@ -179,7 +184,7 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
           <p class="item-price">Rs.${(element.price * 0.8).toFixed(2)}</p>
         </div>
         <div class="cart-box">
-        <button class="btn-glow cart-button">Add to Cart</button>
+        <button class="btn-glow cart-button fa fa-cart-plus"></button>
         </div>
       `;
 
@@ -190,8 +195,15 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
       cartButton.addEventListener("click", async () => {
         const token = localStorage.getItem("token");
         if (!token) {
-          alert("Please log in to add items to the cart.");
-          window.location.href = "../pages/login.html";
+          tostTopEnd.fire({
+            icon: "info",
+            title: "Please log in to add items to the cart",
+          });
+
+          setTimeout(
+            () => (window.location.href = "../pages/login.html"),
+            2000
+          );
           return;
         }
 
@@ -201,10 +213,18 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
             { itemid: element._id, quantity: 1 },
             { headers: { Authorization: token } }
           );
+
+          tostTopEnd.fire({
+            icon: "success",
+            title: response.data.message,
+          });
           console.log(response.data);
         } catch (error) {
           console.error("Error adding to cart:", error);
-          alert(error.response?.data?.message);
+          tostTopEnd.fire({
+            icon: "error",
+            title: error.response?.data?.message,
+          });
         }
       });
 
@@ -219,7 +239,10 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     }
   } catch (error) {
     console.error(error.message);
-    alert(error.response?.data?.message);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message,
+    });
   }
 }
 
