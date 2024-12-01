@@ -1,4 +1,4 @@
-import { baseURL, navbar, page_footer } from "../utils/utils.js";
+import { baseURL, navbar, page_footer, tostTopEnd } from "../utils/utils.js";
 const token = localStorage.getItem("token");
 
 async function getUserInfo() {
@@ -21,7 +21,10 @@ async function getUserInfo() {
           <p>${userinfo.email || ""}</p>
         </div>`;
   } catch (error) {
-    console.log(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message,
+    });
   }
 }
 getUserInfo();
@@ -29,13 +32,7 @@ getUserInfo();
 async function appendOrder(orderdetails, itemsArray, containerId) {
   const container = document.getElementById(containerId);
   const orderContainer = document.createElement("div");
-  orderContainer.classList.add(
-    "bg-white",
-    "card",
-    "mb-4",
-    "order-list",
-    "shadow-sm"
-  );
+  orderContainer.classList.add("card", "mb-4", "order-list", "shadow-sm");
 
   const itemsContainerId = `items-${orderdetails._id}`;
   orderContainer.innerHTML = `
@@ -53,8 +50,7 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
                 </span>
               </a>
               <p class="text-gray mb-3">
-                <i class="icofont-list">ORDER #${orderdetails._id}</i><br>
-                <i class="icofont-clock-time ml-2"></i> Mon, Nov 12, 6:26 PM
+                <i>ORDER #${orderdetails._id}</i><br>
               </p>
               <div id="${itemsContainerId}" class="text-dark items"></div>
               <hr />
@@ -71,15 +67,38 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
         </div>`;
   container.appendChild(orderContainer);
 
+  // Dynamically generate the table for items
   const itemsContainer = document.getElementById(itemsContainerId);
-  itemsArray.forEach((ele) => {
-    itemsContainer.innerHTML += `
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item">${ele.quantity}</li>
-          <li class="list-group-item">${ele.name}</li>
-          <li class="list-group-item">Rs.${(ele.price *= 0.8).toFixed(2)}</li>
-        </ul>`;
+  const table = document.createElement("table");
+  table.classList.add("table", "table-striped");
+
+  // Add table headers
+  table.innerHTML = `
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>`;
+
+  // Populate table rows
+  const tbody = table.querySelector("tbody");
+  itemsArray.forEach((ele, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+            <th scope="row">${index + 1}</th>
+            <td>${ele.name}</td>
+            <td>${ele.quantity}</td>
+            <td>Rs.${(ele.price * 0.8).toFixed(2)}</td>`;
+    tbody.appendChild(row);
   });
+
+  // Append the table to the items container
+  itemsContainer.appendChild(table);
 }
 
 async function getOrders() {
@@ -91,9 +110,6 @@ async function getOrders() {
     const orders = response.data;
     const currentOrderDiv = document.querySelector(".current-order");
     const completedOrderDiv = document.querySelector(".past-order");
-
-    currentOrderDiv.innerHTML = "";
-    completedOrderDiv.innerHTML = "";
 
     for (const orderdetails of orders) {
       let itemsArray = [];
@@ -108,15 +124,20 @@ async function getOrders() {
       }
 
       if (orderdetails.status.toLowerCase() === "pending") {
+        currentOrderDiv.innerHTML = "";
         await appendOrder(orderdetails, itemsArray, "current-order");
       } else {
+        completedOrderDiv.innerHTML = "";
         await appendOrder(orderdetails, itemsArray, "past-order");
       }
     }
 
     console.log(orders);
   } catch (error) {
-    console.log(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message,
+    });
   }
 }
 

@@ -1,15 +1,36 @@
+:root {
+  --primary-color: 111, 76, 255;
+  --primary-text-color: #000;
+
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #000;
+  --bg-secondary: #2e2e2e;
+  --bg-accent: #37474f;
+
+  --primary-text-color: #f9f9f9;
+}
+
 html,
 body {
-  background: -webkit-gradient(
+  /* background: -webkit-gradient(
     linear,
     left top,
     right top,
     from(#f29263),
     to(#ee5a6f)
-  );
-  background: linear-gradient(to right, #ee5a6f, #f29263);
+  ); */
+  background-color: var(--bg-primary);
+  /* background: linear-gradient(to right, #000000, #4d4d4d); */
   background-size: 200% 100%;
   animation: colorSlide 20s ease-in-out infinite;
+  transition: background 0.2s linear;
+}
+body * {
+  transition: background 0.2s linear;
 }
 @keyframes colorSlide {
   0% {
@@ -23,11 +44,17 @@ body {
   }
 }
 
-.profile-container {
-  margin: 80px 0;
+.bg {
+  transition: background 0.2s linear;
+  border-radius: 20px;
+  background-color: var(--bg-secondary);
+  color: var(--primary-text-color);
 }
-.profile-container .row{
 
+.profile-container {
+  margin: 50px 0;
+}
+.profile-container .row {
   height: 90vh;
 }
 .row {
@@ -38,6 +65,7 @@ body {
 .row > * {
   padding-right: 0;
 }
+
 /* My Account */
 .payments-item img.mr-3 {
   width: 47px;
@@ -48,11 +76,15 @@ body {
   font-size: 13px;
   padding: 7px 0 7px 0;
 }
+.osahan-account-page-left,
+.osahan-account-page-right {
+  margin-top: 20px;
+}
 .osahan-account-page-left .nav-link {
   padding: 18px 20px;
   border: none;
   font-weight: 600;
-  color: #535665;
+  color: var(--primary-text-color);
 }
 .osahan-account-page-left .nav-link i {
   width: 28px;
@@ -64,11 +96,10 @@ body {
   font-size: 15px;
   border-radius: 50px;
   margin: 0 7px 0 0px;
-  color: #fff;
+  color: var(--primary-text-color);
 }
 .osahan-account-page-left .nav-link.active {
-  background: #f3f7f8;
-  color: #282c3f !important;
+  color: var(--primary-text-color) !important;
 }
 .osahan-account-page-left .nav-link.active i {
   background: #282c3f !important;
@@ -82,7 +113,7 @@ body {
 .card.offer-card h5 {
   border: 1px dotted #daceb7;
   display: inline-table;
-  color: #17a2b8;
+  color: var(--primary-text-color);
   margin: 0 0 19px 0;
   font-size: 15px;
   padding: 6px 10px 6px 6px;
@@ -141,28 +172,32 @@ body {
   vertical-align: bottom;
 }
 
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #000000;
-}
-
-.shadow-sm {
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-}
-
 .rounded-pill {
   border-radius: 50rem !important;
 }
 a:hover {
   text-decoration: none;
+}
+@media screen and (max-width: 653px) {
+  .row > * {
+    padding-left: 0;
+  }
+  .osahan-user-media {
+    padding-top: 1rem;
+  }
+  .p-4 {
+    padding: 0 !important;
+  }
+  .pb-4 {
+    padding: 0.1rem 0 !important;
+  }
+  .h-100 {
+    height: min-content !important;
+  }
+  .profile-container .row {
+    height: min-content;
+  }
+  .accordion-body{
+    padding: 10px 0px;
+  }
 }
