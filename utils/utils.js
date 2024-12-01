@@ -2,6 +2,23 @@ let baseURL = "http://localhost:4500";
 // let baseURL = "https://satyanaam-food-backend.onrender.com";
 let currUser = JSON.parse(localStorage.getItem("user"));
 let miniprofile;
+
+const tostTopEnd = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: false,
+});
+
+const tostBottomEnd = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+});
+
 async function navbar() {
   try {
     const response = await axios.get(baseURL);
@@ -12,14 +29,7 @@ async function navbar() {
         <div class="container-fluid">
           <!-- Navbar Brand -->
           <a class="navbar-brand" href="/index.html"> ${restaurent.name} </a>
-          <div class="one-quarter" id="switch">
-  <input type="checkbox" class="checkbox" id="chk" />
-  <label class="label" for="chk">
-      <i class="fas fa-moon"></i>
-      <i class="fas fa-sun"></i>
-      <div class="ball"></div>
-  </label>
-</div>
+          
           <!-- Navbar Toggler -->
           <button
             class="navbar-toggler"
@@ -35,6 +45,16 @@ async function navbar() {
           <!-- Navbar Links -->
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <div class="one-quarter" id="switch">
+                <input type="checkbox" class="checkbox toggle-theme" id="chk" />
+                <label class="label" for="chk">
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                    <div class="ball"></div>
+                </label>
+              </div>
+            </li>
               <!-- cart -->
               <li class="nav-item">
                 <a class="nav-link cart" href="/pages/cart.html">
@@ -76,9 +96,28 @@ async function navbar() {
           </div>
         </div>
       </nav>`;
-    const toggle = document.getElementById("toggle-theme");
-    toggle.addEventListener("change", () => {
-      document.body.classList.toggle("dark");
+
+    // theme switch
+    let thememode = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = thememode;
+
+    function updateBallPosition(thememode) {
+      if (thememode == "dark") {
+        const ball = document.querySelector(".ball");
+        ball.style.transform = "translateX(24px)";
+      } else {
+        const ball = document.querySelector(".ball");
+        ball.style.transform = "translateX(0px)";
+      }
+    }
+    updateBallPosition(thememode);
+
+    const themeToggle = document.querySelector(".toggle-theme");
+    themeToggle.addEventListener("click", () => {
+      thememode = thememode === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = thememode;
+      localStorage.setItem("theme", thememode);
+      updateBallPosition(thememode);
     });
 
     miniprofile = navbar.querySelector(".profile-dropdown");
@@ -165,13 +204,19 @@ async function logout() {
         headers: { Authorization: token },
       }
     );
-    alert(response?.data?.message);
+    tostTopEnd.fire({
+      icon: "info",
+      title: response?.data?.message,
+    });
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    location.reload();
+    setTimeout(() => location.reload(), 2000);
   } catch (error) {
     console.log(error.response?.data?.message);
-    alert(error.response?.data?.message);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message,
+    });
   }
 }
 
@@ -192,7 +237,7 @@ async function page_footer() {
     const restaurent = response.data.data.restaurantDetails;
     const footer = document.querySelector("footer");
     footer.innerHTML = `
-      <div class="container p-4">
+      <div class="container">
         <div class="row mt-4">
           <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
             <h5 class="text-uppercase mb-4">About restaurent</h5>
@@ -225,24 +270,24 @@ async function page_footer() {
           <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
             <ul class="fa-ul" style="margin-left: 1.65em">
               <li class="mb-3">
-                <span class="fa-li"><i class="fas fa-home"></i></span
-                ><span class="ms-2">${restaurent.address.line1}</span>
+                <i class="fas fa-home"></i>
+                <span class="ms-2">${restaurent.address.line1}</span>
               </li>
               <li class="mb-3">
-                <span class="fa-li"><i class="fas fa-location-dot"></i></span
-                ><span class="ms-2">${restaurent.address.city}</span>
+                <i class="fas fa-location-dot"></i>
+                <span class="ms-2">${restaurent.address.city}</span>
               </li>
               <li class="mb-3">
-                <span class="fa-li"><i class="fas fa-map"></i></span
-                ><span class="ms-2">${restaurent.address.state}</span>
+                <i class="fas fa-map"></i>
+                <span class="ms-2">${restaurent.address.state}</span>
               </li>
               <li class="mb-3">
-                <span class="fa-li"><i class="fas fa-envelope"></i></span
-                ><span class="ms-2">${restaurent.contact.email}</span>
+                <i class="fas fa-envelope"></i>
+                <span class="ms-2">${restaurent.contact.email}</span>
               </li>
               <li class="mb-3">
-                <span class="fa-li"><i class="fas fa-phone"></i></span
-                ><span class="ms-2">${restaurent.contact.phone}</span>
+                <i class="fas fa-phone"></i>
+                <span class="ms-2">${restaurent.contact.phone}</span>
               </li>
             </ul>
           </div>
@@ -259,4 +304,4 @@ async function page_footer() {
   }
 }
 
-export { baseURL, page_footer, cover_page, navbar };
+export { baseURL, page_footer, cover_page, navbar, tostBottomEnd, tostTopEnd };

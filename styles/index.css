@@ -1,21 +1,20 @@
 :root {
   --primary-color: 111, 76, 255;
-  --light-theme-background: white;
-  --light-theme-font: black;
-  --dark-theme-background: black;
-  --dark-theme-font: white;
+  --primary-text-color: #f9f9f9;
+
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #ffffff;
 }
+
+[data-theme="dark"] {
+  --bg-primary: #000;
+  --bg-secondary: #2e2e2e;
+  --bg-accent: #37474f;
+
+  --primary-text-color: #f9f9f9;
+}
+
 /* General Reset */
-
-.quantity-selector input[type="number"]::-webkit-outer-spin-button,
-.quantity-selector input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.quantity-selector input[type="number"] {
-  -moz-appearance: textfield; /* For Firefox */
-}
 
 html,
 body {
@@ -25,6 +24,8 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  transition: background 0.2s linear;
+  background-color: var(--bg-primary);
 }
 
 /* Main container for the page */
@@ -32,7 +33,6 @@ body {
   position: relative;
   width: 100%;
   overflow-y: auto;
-  color: white !important;
 }
 
 /* Banner image */
@@ -40,7 +40,7 @@ body {
   position: relative;
   width: 100%;
   height: 100vh;
-  object-fit: fill;
+  object-fit: cover;
 
   -webkit-mask-image: -webkit-gradient(
     linear,
@@ -65,6 +65,8 @@ body {
 
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #333;
+
+  color: var(--primary-text-color);
 
   paint-order: stroke fill;
 }
@@ -111,12 +113,12 @@ body {
   z-index: 10;
   position: absolute;
   left: 50%;
-  top: 25%; /* Adjusted to avoid overlap */
+  top: 70%; /* Adjusted to avoid overlap */
   transform: translateX(-50%);
   padding: 12px 24px;
   font-size: 16px;
   font-weight: bold;
-  color: white;
+  color: var(--primary-text-color);
   background: linear-gradient(
     90deg,
     #007bff,
@@ -163,9 +165,7 @@ body {
   padding: 20px;
   width: 100%;
   justify-content: space-evenly;
-  background: rgba(0, 0, 0, 0.8); /* Slightly transparent black */
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
 
@@ -324,7 +324,7 @@ iframe {
   margin: 5px;
   padding: 8px 12px;
   background: #333;
-  color: white;
+  color: var(--primary-text-color);
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -347,7 +347,7 @@ iframe {
   font-weight: bold;
   text-align: center;
   transition: 0.5s;
-  color: white;
+  color: var(--primary-text-color);
 }
 
 .reset-item:hover {
@@ -387,7 +387,6 @@ iframe {
   border-radius: 10px;
   overflow: auto;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .item * {
@@ -405,18 +404,17 @@ iframe {
 
 .item-img img {
   width: 100%;
-  height: auto;
   object-fit: cover;
 }
 
 .item-details {
   text-align: left;
   padding: 10px;
-  color: white;
+  color: var(--primary-text-color);
 }
 
 .item-name {
-  color: white;
+  color: var(--primary-text-color);
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 5px;
@@ -443,10 +441,11 @@ iframe {
 .cart-box {
   display: flex;
   flex-direction: row;
+  justify-content: end;
   align-items: center;
   gap: 10px;
   margin: 0;
-  margin-left: 50%;
+  margin: 10px;
 }
 
 .cart-button:hover {
@@ -458,17 +457,16 @@ iframe {
 }
 
 .cart-button {
-  width: 100%;
+  width: 30%;
   padding: 8px 16px;
   font-size: 1rem;
-  right: 100%;
   font-weight: bold;
   color: #fff;
   background: linear-gradient(135deg, #28a745, #218838);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 10px 0;
+  border-radius: 20px;
 }
 
 .btn-glow:hover {
@@ -484,7 +482,7 @@ iframe {
     width: 100%;
     position: absolute;
     top: 30%;
-    font-size: clamp(2.5rem, 5vw, 5rem); /* Responsive font size */
+    font-size: clamp(2.3rem, 5vw, 5rem); /* Responsive font size */
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -496,7 +494,9 @@ iframe {
 
     paint-order: stroke fill;
   }
-
+  footer .row {
+    text-align: justify;
+  }
   .cover-page h1 span {
     display: none;
     margin-top: 5px;
@@ -518,16 +518,16 @@ iframe {
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
     height: 5px;
-    background-color: #f8f8f8;
+    background-color: var(--bg-accent);
   }
-
-  .browse-menu-button {
-    top: 15%;
+  #myCarousel{
+    margin-top: 50px;
   }
   #myCarousel img {
+    display: inline-block;
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 30vh;
     object-fit: cover;
   }
 
@@ -537,7 +537,7 @@ iframe {
 
   .filter-row,
   .category-row {
-    margin: 5px;
+    margin: 10px;
     border-radius: none;
   }
 
@@ -548,7 +548,7 @@ iframe {
     flex-direction: column;
     justify-content: center;
     gap: 0;
-    padding: 5px;
+    padding: 10px;
   }
 
   .map-container {
@@ -561,23 +561,23 @@ iframe {
   }
 
   .menu-container {
-    padding: 5px;
+    padding: 10px;
   }
   .item {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
   }
-
-  .item-img {
-    position: relative;
+  .item:hover {
+    transform: scale(1.01);
   }
 
   .item-img img {
     width: 50%;
-    position: fixed;
+    position: absolute;
     right: 1px;
     height: 100%;
     object-fit: fill;
@@ -594,7 +594,7 @@ iframe {
 
   .item-details {
     z-index: 1;
-    width: 60%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     gap: 5px; /* Space between text elements */
@@ -618,7 +618,7 @@ iframe {
 
   .item-description {
     font-size: 0.9rem;
-    color: #f8f8f8;
+    color: --bg-primary;
     margin: 0;
   }
   .item-price {
@@ -634,56 +634,20 @@ iframe {
 
   .cart-box {
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin-left: auto; /* Push the cart controls to the far right */
-  }
-
-  .quantity-selector {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .quantity-selector button {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background-color: #f8f8f8;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  .quantity-selector input {
-    width: 40px;
-    text-align: center;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    padding: 2px;
+    height: 90%;
+    margin: 0 auto;
   }
 
   .cart-button {
-    padding: 8px;
-    font-size: 0.9rem;
     font-weight: bold;
-    background-color: #007bff;
     color: #fff;
     border: none;
     text-align: center;
     cursor: pointer;
     width: 100%;
-  }
-
-  .cart-button:hover {
-    background-color: #0056b3;
-  }
-  .pagination {
-    padding: 5px;
+    padding: 10px 30px;
+    font-size: 2rem;
+    display: flex;
+    margin: auto;
   }
 }
