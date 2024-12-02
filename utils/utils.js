@@ -124,7 +124,11 @@ async function navbar() {
     if (currUser?.role == "admin") loadAdmin();
     else if (currUser?.role == "user") loadUser();
   } catch (error) {
-    console.log(error.message);
+    console.error(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.message,
+    });
   }
 }
 
@@ -212,10 +216,10 @@ async function logout() {
     localStorage.removeItem("user");
     setTimeout(() => location.reload(), 2000);
   } catch (error) {
-    console.log(error.response?.data?.message);
+    console.error(error);
     tostTopEnd.fire({
       icon: "error",
-      title: error.response?.data?.message,
+      title: error.message,
     });
   }
 }
@@ -227,7 +231,11 @@ async function cover_page() {
     const coverPage = document.querySelector(".cover-page");
     coverPage.innerHTML += `<h1>${restaurent.name}<span class="restaurant-tagline">${restaurent.tagline}</span></h1>`;
   } catch (error) {
-    console.log(error.message);
+    console.error(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.message,
+    });
   }
 }
 
@@ -300,7 +308,11 @@ async function page_footer() {
         >
       </div>`;
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.message,
+    });
   }
 }
 
