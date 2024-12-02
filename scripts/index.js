@@ -137,9 +137,10 @@ async function restaurent_info() {
       restaurent_menu();
     });
   } catch (error) {
+    console.error(error);
     tostTopEnd.fire({
       icon: "error",
-      title: error.message,
+      title: error.response?.data?.message || error.name,
     });
   }
 }
@@ -153,82 +154,128 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     const response = await axios.get(`${baseURL}/menu?page=${pagenumber}`, {
       params: finalFilters,
     });
+
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
-    const itemsDiv = document.querySelector(".menu-container");
-    itemsDiv.innerHTML = ""; // Clear previous menu items
+    // group items by category
+    const categories = {};
+    menuItems.forEach((item) => {
+      if (!categories[item.category]) {
+        categories[item.category] = [];
+      }
+      categories[item.category].push(item);
+    });
 
-    menuItems.forEach((element) => {
-      const itemDiv = document.createElement("div");
-      itemDiv.classList.add("item");
-      itemDiv.innerHTML = `
-        <div class="item-img">
-          <img src="${element.image||"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRou4_6sFEozO5Cia09uqGK_AvpoHOlNRMteA&s"}" alt="${
-        element.name
-      }" width="300px" height="300px"/>
-        </div>
-        <div class="item-details">
-          <h3 class="item-name">${element.name} 
-            <span class="badge rounded-pill text-bg-success">★ ${
-              element.rating
-            }</span>
-          </h3>
-          <p class="item-description" data-bs-toggle="tooltip" data-bs-title="Default tooltip"><abbr title="${
-            element.description
-          }">${
-        element.description
-      }</abbr></p><p class="item-og-price" style="color: #999;text-decoration: line-through;">Rs.${element.price.toFixed(
-        2
-      )} <span class="badge rounded-pill text-bg-warning">20% off</span></p>
-          <p class="item-price">Rs.${(element.price * 0.8).toFixed(2)}</p>
-        </div>
-        <div class="cart-box">
-        <button class="btn-glow cart-button fa fa-cart-plus"></button>
+    // accordion container
+    const accordionDiv = document.querySelector("#accordionPanelsStayOpen");
+    accordionDiv.innerHTML = ""; // Clear previous content
+
+    // Create accordion items for each category
+    Object.keys(categories).forEach((category, index) => {
+      const categoryItems = categories[category];
+
+      const accordionItem = document.createElement("div");
+      accordionItem.classList.add("accordion-item");
+
+      accordionItem.innerHTML = `
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button ${0 === 0 ? "" : "collapsed"}"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#panelsStayOpen-collapse${index}"
+            aria-expanded="${0 === 0}"
+            aria-controls="panelsStayOpen-collapse${index}"
+          >
+            ${category}
+          </button>
+        </h2>
+        <div
+          id="panelsStayOpen-collapse${index}"
+          class="accordion-collapse collapse ${0 === 0 ? "show" : ""}"
+        >
+          <div class="accordion-body current-order" id="${category}">
+            <!-- Category items will be appended here -->
+          </div>
         </div>
       `;
 
-      // Elements
-      const cartButton = itemDiv.querySelector(".cart-button");
+      const categoryBody = accordionItem.querySelector(".accordion-body");
 
-      // Add to Cart Button Click
-      cartButton.addEventListener("click", async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          tostTopEnd.fire({
-            icon: "info",
-            title: "Please log in to add items to the cart",
-          });
+      // Add category items
+      categoryItems.forEach((element) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("item");
+        itemDiv.innerHTML = `
+          <div class="item-img">
+            <img src="${element.image}" alt="${
+          element.name
+        }" width="300px" height="300px" />
+          </div>
+          <div class="item-details">
+            <h3 class="item-name">${element.name} 
+              <span class="badge rounded-pill text-bg-success">★ ${
+                element.rating
+              }</span>
+            </h3>
+            <p class="item-description">
+              <abbr title="${element.description}">${element.description}</abbr>
+            </p>
+            <p class="item-og-price" style="color: #999; text-decoration: line-through;">
+              Rs.${element.price.toFixed(2)} 
+              <span class="badge rounded-pill text-bg-warning">20% off</span>
+            </p>
+            <p class="item-price">Rs.${(element.price * 0.8).toFixed(2)}</p>
+          </div>
+          <div class="cart-box">
+            <button class="btn-glow cart-button fa fa-cart-plus"></button>
+          </div>
+        `;
 
-          setTimeout(
-            () => (window.location.href = "../pages/login.html"),
-            2000
-          );
-          return;
-        }
+        const cartButton = itemDiv.querySelector(".cart-button");
 
-        try {
-          const response = await axios.post(
-            `${baseURL}/cart`,
-            { itemid: element._id, quantity: 1 },
-            { headers: { Authorization: token } }
-          );
+        // Add to Cart Button Click
+        cartButton.addEventListener("click", async () => {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            tostTopEnd.fire({
+              icon: "info",
+              title: "Please log in to add items to the cart",
+            });
 
-          tostTopEnd.fire({
-            icon: "success",
-            title: response.data.message,
-          });
-          console.log(response.data);
-        } catch (error) {
-          console.error("Error adding to cart:", error);
-          tostTopEnd.fire({
-            icon: "error",
-            title: error.response?.data?.message,
-          });
-        }
+            setTimeout(
+              () => (window.location.href = "../pages/login.html"),
+              2000
+            );
+            return;
+          }
+
+          try {
+            const response = await axios.post(
+              `${baseURL}/cart`,
+              { itemid: element._id, quantity: 1 },
+              { headers: { Authorization: token } }
+            );
+
+            tostTopEnd.fire({
+              icon: "success",
+              title: response.data.message,
+            });
+            console.log(response.data);
+          } catch (error) {
+            console.error(error);
+            tostTopEnd.fire({
+              icon: "error",
+              title: error.response?.data?.message || error.name,
+            });
+          }
+        });
+
+        categoryBody.appendChild(itemDiv);
       });
 
-      itemsDiv.append(itemDiv);
+      accordionDiv.appendChild(accordionItem);
     });
 
     console.log("Menu Items:", menuItems);
@@ -238,10 +285,10 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
       categories.forEach((el) => el.classList.remove("categoryselected"));
     }
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
     tostTopEnd.fire({
       icon: "error",
-      title: error.response?.data?.message,
+      title: error.response?.data?.message || error.name,
     });
   }
 }
