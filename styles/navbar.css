@@ -1,19 +1,30 @@
 :root {
   --primary-color: 111, 76, 255;
-  --primary-text-color: #f9f9f9;
+
+  --bg-accent: #333;
+  --bg-secondary: #ffffff;
+  --secondary-text-color: #f9f9f9;
+
+  /* --bg-primary: whitesmoke; */
+  /* --primary-text-color: black; */
 
   --bg-primary: #1e1e1e;
-  --bg-secondary: #ffffff;
+  --primary-text-color: #f9f9f9;
+
+  /* --bg-accent: #cacaca; */
 }
 
 [data-theme="dark"] {
   --bg-primary: #000;
   --bg-secondary: #2e2e2e;
-  --bg-accent: #37474f;
-
   --primary-text-color: #f9f9f9;
+  --secondary-text-color: white;
+  --bg-accent: #333;
 }
 
+body {
+  transition: background 0.2s linear;
+}
 .form-inline {
   display: inline-block;
 }
@@ -146,9 +157,13 @@
 /* footer */
 
 footer {
-  color: var(--primary-text-color);
+  color: var(--secondary-text-color);
+  background-color: var(--bg-accent);
 }
-
+.mt-4 {
+  padding-top: 1.5rem !important;
+  margin-top: 2rem !important;
+}
 footer .row {
   justify-content: space-between;
   align-items: center;
@@ -158,9 +173,16 @@ footer .btn-lg {
   padding: 10px;
   height: min-content;
   width: min-content;
-  color: white;
+  color: var(--secondary-text-color);
   background-color: transparent;
   border: none;
+}
+footer .btn-lg:hover {
+  color: var(--primary-text-color);
+}
+
+footer a {
+  color: var(--primary-text-color);
 }
 
 * {
@@ -173,7 +195,7 @@ footer .btn-lg {
 }
 
 .label {
-  background-color: #111;
+  background-color: var(--bg-primary);
   border-radius: 50px;
   cursor: pointer;
   display: flex;
@@ -187,7 +209,7 @@ footer .btn-lg {
 }
 
 .label .ball {
-  background-color: #fff;
+  background-color: var(--primary-text-color);
   border-radius: 50%;
   position: absolute;
   top: 2px;
@@ -239,5 +261,18 @@ footer .btn-lg {
   .navbar .navbar-brand i {
     font-size: 20px;
     margin-right: 5px;
+  }
+}
+@media (max-width: 500px) {
+  .swal2-container {
+    margin: 60px 0;
+    width: 100% !important;
+  }
+  .body.swal2-toast-shown .swal2-container.swal2-top-end,
+  body.swal2-toast-shown .swal2-container.swal2-top-right {
+    inset: 0 !important;
+  }
+  footer .row{
+    text-align: justify;
   }
 }
