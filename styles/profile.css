@@ -39,7 +39,7 @@ body * {
   margin: 50px 0;
 }
 .profile-container .row {
-  height: 90vh;
+  min-height: 80vh;
 }
 .row {
   max-width: 90%;
@@ -162,6 +162,40 @@ body * {
 a:hover {
   text-decoration: none;
 }
+
+.mb-4 {
+  padding: 10px;
+}
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+.accordion-button {
+  background-color: whitesmoke;
+}
+
+.accordion-body {
+  gap: 15px;
+  padding: 20px;
+}
+
+.accordion-item {
+  border: none;
+}
+.accordion-header {
+  border: none;
+  background-color: var(--bg-secondary);
+}
+
+.accordion-item:first-of-type > .accordion-header .accordion-button {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.osahan-account-page-left,
+a {
+  color: var(--secondary-text-color) !important;
+}
 @media screen and (max-width: 653px) {
   .row > * {
     padding-left: 0;
@@ -181,7 +215,18 @@ a:hover {
   .profile-container .row {
     height: min-content;
   }
-  .accordion-body{
+  .accordion-header {
+    background-color: var(--bg-primary);
+  }
+  .accordion-body {
     padding: 10px 0px;
+  }
+  .accordion-item:last-of-type > .accordion-collapse {
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+  }
+  .accordion-item:last-of-type > .accordion-header .accordion-button {
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
   }
 }

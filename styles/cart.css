@@ -23,14 +23,17 @@
 }
 
 body {
-  margin-top: 100px;
+  margin-top: 80px;
   background: var(--bg-primary);
 }
 
 .title {
+  text-align: center;
+  margin: 10px;
   margin-bottom: 5vh;
 }
 .card {
+  background-color: whitesmoke;
   margin: auto;
   max-width: 950px;
   width: 90%;
@@ -40,7 +43,7 @@ body {
 }
 
 .cart-container {
-  background-color: #fff;
+  background-color: whitesmoke;
   padding: 10px;
   border-radius: 20px 0 0 20px;
 }
@@ -91,9 +94,7 @@ a {
 .cart-container img {
   width: 3.5rem;
 }
-.back-to-shop {
-  margin-top: 4.5rem;
-}
+
 h5 {
   margin-top: 4vh;
 }
@@ -103,10 +104,11 @@ hr {
 form {
   padding: 2vh 0;
 }
-select {
+select,
+textarea {
   border: 1px solid rgba(0, 0, 0, 0.137);
   padding: 1.5vh 1vh;
-  margin-bottom: 4vh;
+  margin-bottom: 1vh;
   outline: none;
   width: 100%;
   background-color: rgb(247, 247, 247);
@@ -114,12 +116,13 @@ select {
 input {
   border: 1px solid rgba(0, 0, 0, 0.137);
   padding: 1vh;
-  margin-bottom: 4vh;
+  margin-bottom: 1vh;
   outline: none;
   width: 100%;
   background-color: rgb(247, 247, 247);
 }
-input:focus::-webkit-input-placeholder {
+input:focus::-webkit-input-placeholder,
+textarea:focus::-webkit-input-placeholder {
   color: transparent;
 }
 .item-quantity button {
@@ -137,11 +140,15 @@ input:focus::-webkit-input-placeholder {
   padding: 1vh;
   border-radius: 0;
 }
+.hide{
+  display: none;
+}
 .btn {
   width: 100%;
   border-radius: 20px;
-  border: 1px solid #333;
-  margin: 5px;
+  border: 2px solid #333;
+  margin: 10px 0;
+  font-weight: bold;
 }
 .btn:focus {
   box-shadow: none;
@@ -181,9 +188,9 @@ a:hover {
     border-top-right-radius: 1rem;
   }
   .card {
-    margin: auto 10px;
+    margin: auto;
     width: 100%;
-    max-width: 95%;
+    max-width: 90%;
   }
   .summary {
     border-top-right-radius: unset;
@@ -191,12 +198,19 @@ a:hover {
   }
 }
 @media (max-width: 567px) {
-  .original-price{
+  .original-price {
     display: none;
   }
-  .item-quantity{
+  .item-price{
+    text-align: end;
+  }
+  .item-quantity {
     margin-left: auto;
     display: flex;
     flex-direction: row;
   }
+}
+
+select {
+  cursor: pointer;
 }

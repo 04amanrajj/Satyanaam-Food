@@ -33,6 +33,7 @@ body {
   width: 400px;
   text-align: center;
   backdrop-filter: blur(10px);
+  transition: background 0.2s linear;
 }
 
 .signup-container h2,
@@ -85,7 +86,7 @@ h1 {
 h1 {
   margin-bottom: 1rem;
   font-size: 24px;
-  color: var(--primary-text-color);
+  color: var(--secondary-text-color);
 }
 
 /* Form styles */
@@ -118,5 +119,5 @@ form button:hover {
 }
 
 h2,p{
-  color: var(--primary-text-color);
+  color: var(--secondary-text-color);
 }

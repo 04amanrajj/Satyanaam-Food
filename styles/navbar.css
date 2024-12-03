@@ -2,8 +2,8 @@
   --primary-color: 111, 76, 255;
 
   --bg-accent: #333;
-  --bg-secondary: #ffffff;
-  --secondary-text-color: #f9f9f9;
+  --bg-secondary: whitesmoke;
+  --secondary-text-color: #333;
 
   /* --bg-primary: whitesmoke; */
   /* --primary-text-color: black; */
@@ -182,7 +182,7 @@ footer .btn-lg:hover {
 }
 
 footer a {
-  color: var(--primary-text-color);
+  color: var(--secondary-text-color);
 }
 
 * {
