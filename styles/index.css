@@ -437,7 +437,13 @@ iframe {
 .item-img img {
   width: 100%;
   object-fit: cover;
+}
+
+.outofstock {
   filter: grayscale(1);
+}
+.cart-box .outofstock:hover {
+  cursor: not-allowed;
 }
 
 .item-details {
@@ -487,12 +493,6 @@ iframe {
 
 .cart-button:active {
   background-color: #1e7e34;
-}
-
-.disable {
-  filter: grayscale(1);
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 .cart-button {

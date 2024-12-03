@@ -60,7 +60,7 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
                     ? "Total Price"
                     : "Total Paid:"
                 }</span>
-                Rs.${orderdetails.totalprice.toFixed(2)}
+                Rs.${(orderdetails.totalprice * 0.8).toFixed(2)}
               </p>
             </div>
           </div>
@@ -110,7 +110,10 @@ async function getOrders() {
     const orders = response.data;
     const currentOrderDiv = document.querySelector(".current-order");
     const completedOrderDiv = document.querySelector(".past-order");
-
+    if (orders.lenght == 0) {
+      currentOrderDiv.innerHTML = `<strong>No orders right now!</strong>`;
+      completedOrderDiv.innerHTML = `<strong>No orders right now!</strong>`;
+    }
     for (const orderdetails of orders) {
       let itemsArray = [];
       for (const element of orderdetails.items) {
@@ -124,10 +127,8 @@ async function getOrders() {
       }
 
       if (orderdetails.status.toLowerCase() === "pending") {
-        currentOrderDiv.innerHTML = "";
         await appendOrder(orderdetails, itemsArray, "current-order");
       } else {
-        completedOrderDiv.innerHTML = "";
         await appendOrder(orderdetails, itemsArray, "past-order");
       }
     }

@@ -208,10 +208,10 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("item");
         itemDiv.innerHTML = `
-          <div class="item-img">
-            <img src="${element.image}" alt="${
-          element.name
-        }" width="300px" height="300px" />
+          <div class="item-img ">
+            <img src="${element.image}" class="${
+          element.available ? "" : "outofstock"
+        }" alt="${element.name}" width="300px" height="300px" />
           </div>
           <div class="item-details">
             <h3 class="item-name">${element.name} 

@@ -23,6 +23,8 @@ async function navbar() {
   try {
     const response = await axios.get(baseURL);
     const restaurent = response.data.data.restaurantDetails;
+    const title = document.querySelector("title");
+    title.textContent += ` | ${restaurent.name}`;
     const navbar = document.querySelector("header");
     navbar.innerHTML = `
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
@@ -157,7 +159,7 @@ function loadAdmin() {
               <a class="dropdown-item" href="/pages/profile.html"><i class="fa fa-user-o"></i> Profile</a>
             </li>
             <li>
-              <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Admin Panel</a>
+              <a class="dropdown-item" href="/pages/admin.html"><i class="fa fa-wrench"></i> Admin Panel</a>
             </li>
             <li>
               <a class="dropdown-item logout-button" href="#"><i class="material-icons">&#xE8AC;</i> Logout</a>
