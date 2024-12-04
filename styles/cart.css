@@ -1,26 +1,4 @@
-:root {
-  --primary-color: 111, 76, 255;
 
-  --bg-accent: #333;
-  --bg-secondary: #ffffff;
-  --secondary-text-color: #f9f9f9;
-
-  /* --bg-primary: whitesmoke; */
-  /* --primary-text-color: black; */
-
-  --bg-primary: #1e1e1e;
-  --primary-text-color: #f9f9f9;
-
-  /* --bg-accent: #cacaca; */
-}
-
-[data-theme="dark"] {
-  --bg-primary: #000;
-  --bg-secondary: #2e2e2e;
-  --primary-text-color: #f9f9f9;
-  --secondary-text-color: white;
-  --bg-accent: #333;
-}
 
 body {
   margin-top: 80px;

@@ -206,7 +206,7 @@ async function ordersummary() {
           title: "Order Placed",
           text: "Thank you for ordering! Your food will be arriving shortly.",
         }).then((result) => {
-          location.reload();
+          window.location.href = "/pages/profile.html";
         });
       } catch (error) {
         console.error(error);

@@ -34,6 +34,12 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
   const orderContainer = document.createElement("div");
   orderContainer.classList.add("card", "mb-4", "order-list", "shadow-sm");
 
+  let statusClass;
+  if (orderdetails.status === "Preparing") statusClass = "primary";
+  else if (orderdetails.status === "Pending") statusClass = "warning";
+  else if (orderdetails.status === "Rejected") statusClass = "danger";
+  else statusClass = "success";
+
   const itemsContainerId = `items-${orderdetails._id}`;
   orderContainer.innerHTML = `
         <div class="gold-members p-4">
@@ -41,9 +47,7 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
             <div class="media-body">
               <a>
                 <span class="float-right">
-                  <span class="badge text-bg-${
-                    orderdetails.status == "pending" ? "warning" : "success"
-                  }">${
+                  <span class="badge text-bg-${statusClass}">${
     String(orderdetails.status).charAt(0).toUpperCase() +
     String(orderdetails.status).slice(1)
   }</span>
@@ -110,7 +114,7 @@ async function getOrders() {
     const orders = response.data;
     const currentOrderDiv = document.querySelector(".current-order");
     const completedOrderDiv = document.querySelector(".past-order");
-    if (orders.lenght == 0) {
+    if (orders.length == 0) {
       currentOrderDiv.innerHTML = `<strong>No orders right now!</strong>`;
       completedOrderDiv.innerHTML = `<strong>No orders right now!</strong>`;
     }
@@ -126,7 +130,10 @@ async function getOrders() {
         });
       }
 
-      if (orderdetails.status.toLowerCase() === "pending") {
+      if (
+        orderdetails.status.toLowerCase() === "pending" ||
+        orderdetails.status.toLowerCase() === "preparing"
+      ) {
         await appendOrder(orderdetails, itemsArray, "current-order");
       } else {
         await appendOrder(orderdetails, itemsArray, "past-order");
@@ -135,6 +142,7 @@ async function getOrders() {
 
     console.log(orders);
   } catch (error) {
+    console.error(error);
     tostTopEnd.fire({
       icon: "error",
       title: error.response?.data?.message,

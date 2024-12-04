@@ -442,9 +442,6 @@ iframe {
 .outofstock {
   filter: grayscale(1);
 }
-.cart-box .outofstock:hover {
-  cursor: not-allowed;
-}
 
 .item-details {
   text-align: left;

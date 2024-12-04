@@ -229,7 +229,9 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
             <p class="item-price">Rs.${(element.price * 0.8).toFixed(2)}</p>
           </div>
           <div class="cart-box">
-            <button class="btn-glow cart-button fa fa-cart-plus"></button>
+            <button class="${
+              element.available ? "" : "outofstock"
+            } btn-glow cart-button fa fa-cart-plus"></button>
           </div>
         `;
 
@@ -251,6 +253,16 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
             return;
           }
 
+
+          if (!element.available) {
+            tostTopEnd.fire({
+              icon: "error",
+              title: "Sorry, this item is out of stock.",
+            });
+
+            cartButton.classList.add("outofstock");
+            return;
+          }
           try {
             const response = await axios.post(
               `${baseURL}/cart`,

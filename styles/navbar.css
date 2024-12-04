@@ -231,6 +231,9 @@ footer a {
 .fa-sun {
   color: #f39c12;
 }
+.swal2-container {
+  margin: 60px 0;
+}
 @media (min-width: 1200px) {
   .form-inline .input-group {
     width: 300px;
@@ -272,7 +275,7 @@ footer a {
   body.swal2-toast-shown .swal2-container.swal2-top-right {
     inset: 0 !important;
   }
-  footer .row{
+  footer .row {
     text-align: justify;
   }
 }
