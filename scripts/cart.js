@@ -1,4 +1,12 @@
-import { baseURL, navbar, page_footer, tostTopEnd } from "../utils/utils.js";
+import {
+  baseURL,
+  cart_counter,
+  loading,
+  navbar,
+  page_footer,
+  stopLoading,
+  tostTopEnd,
+} from "../utils/utils.js";
 const token = localStorage.getItem("token");
 
 async function fetchCart() {
@@ -6,8 +14,7 @@ async function fetchCart() {
     const response = await axios.get(`${baseURL}/cart`, {
       headers: { Authorization: token },
     });
-
-    console.log(response.data);
+    stopLoading();
     return response.data;
   } catch (error) {
     console.error(error);
@@ -67,9 +74,9 @@ async function ordersummary() {
     const response = await fetchCart();
     const cart = response.data;
     const summary = document.querySelector(".summary");
+    summary.style.display = "block";
     const itemsDiv = document.querySelector(".itemdiv");
 
-    console.log(cart);
     // Render summary
     summary.innerHTML = `
         <div>
@@ -89,9 +96,7 @@ async function ordersummary() {
           style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
         >
           <div class="row">
-            <div class="col">PRICE ${
-              cart.items.length < 2 ? "" : cart.items.length
-            }</div>
+            <div class="col">PRICE</div>
             <div class="col text-right total-price">Rs.${cart.totalprice.toFixed(
               2
             )}</div>
@@ -200,7 +205,7 @@ async function ordersummary() {
           },
           { headers: { Authorization: token } }
         );
-
+        stopLoading();
         console.log(response);
         Swal.fire({
           title: "Order Placed",
@@ -220,6 +225,7 @@ async function ordersummary() {
     // Add event listeners for quantity buttons
     addQuantityListeners(cart);
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",
@@ -278,3 +284,5 @@ function addQuantityListeners(cart) {
 ordersummary();
 navbar();
 page_footer();
+cart_counter();
+loading();

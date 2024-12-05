@@ -59,9 +59,13 @@ async function navbar() {
             </li>
               <!-- cart -->
               <li class="nav-item">
-                <a class="nav-link cart" href="/pages/cart.html">
+                <a class="nav-link cart position-relative" href="/pages/cart.html">
                   <i class="fa fa-shopping-cart"></i>
-                  Cart
+                  Cart<span
+                            class="cart-counter position-absolute top-1  visually-hidden start-100 translate-middle badge rounded-pill bg-danger"
+                          >
+                            99+
+                          </span>
                 </a>
               </li>
               <!-- Profile Dropdown -->
@@ -122,6 +126,8 @@ async function navbar() {
       updateBallPosition(thememode);
     });
 
+    cart_counter();
+
     miniprofile = navbar.querySelector(".profile-dropdown");
     if (currUser?.role == "admin") loadAdmin();
     else if (currUser?.role == "user") loadUser();
@@ -132,6 +138,17 @@ async function navbar() {
       title: error.message,
     });
   }
+}
+
+async function cart_counter() {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${baseURL}/cart`, {
+    headers: { Authorization: token },
+  });
+  console.log(response);
+  const cartCounter = document.querySelector(".cart-counter");
+  cartCounter.textContent = response.data.data.items.length;
+  cartCounter.classList.remove("visually-hidden");
 }
 
 function loadAdmin() {
@@ -317,5 +334,29 @@ async function page_footer() {
     });
   }
 }
+function loading() {
+  const loadingHTML = document.querySelector(".loading-screen");
+  if (!loadingHTML) return;
+  loadingHTML.innerHTML = `
+ <div class="loading-popup">
+    <div class="spinner"></div>
+</div>`;
+}
 
-export { baseURL, page_footer, cover_page, navbar, tostBottomEnd, tostTopEnd };
+function stopLoading() {
+  let loadingScreen = document.querySelector(".loading-screen");
+  if (!loadingScreen) return;
+  // loadingScreen.style.display="none";
+  loadingScreen.classList.remove("loading-screen");
+}
+export {
+  baseURL,
+  page_footer,
+  cover_page,
+  navbar,
+  tostBottomEnd,
+  tostTopEnd,
+  cart_counter,
+  loading,
+  stopLoading,
+};

@@ -5,11 +5,15 @@ import {
   navbar,
   tostTopEnd,
   tostBottomEnd,
+  cart_counter,
+  loading,
+  stopLoading,
 } from "../utils/utils.js";
 let filters = {};
 async function restaurent_info() {
   try {
     const response = await axios.get(baseURL);
+    stopLoading();
     const restaurantDetails = document.querySelector(".details-container");
 
     const restaurent = response.data.data.restaurantDetails;
@@ -154,7 +158,7 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     const response = await axios.get(`${baseURL}/menu?page=${pagenumber}`, {
       params: finalFilters,
     });
-
+    stopLoading();
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
@@ -253,7 +257,6 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
             return;
           }
 
-
           if (!element.available) {
             tostTopEnd.fire({
               icon: "error",
@@ -269,11 +272,12 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
               { itemid: element._id, quantity: 1 },
               { headers: { Authorization: token } }
             );
-
+            stopLoading();
             tostTopEnd.fire({
               icon: "success",
               title: response.data.message,
             });
+            cart_counter();
             console.log(response.data);
           } catch (error) {
             console.error(error);
@@ -289,8 +293,6 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
 
       accordionDiv.appendChild(accordionItem);
     });
-
-    console.log("Menu Items:", menuItems);
 
     if (menuItems.length == 0) {
       const categories = document.querySelectorAll(".category-item");
@@ -324,3 +326,5 @@ cover_page();
 restaurent_info();
 restaurent_menu();
 page_footer();
+cart_counter();
+loading();
