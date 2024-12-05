@@ -379,7 +379,7 @@ iframe {
   border: none !important;
 }
 .accordion-button:not(.collapsed) {
-  color: var(--secondary-text-color);
+  color: var(--primary-text-color);
   background: linear-gradient(135deg, #ff4b5c, #007bff);
   box-shadow: none;
   background-size: 200% 100%; /* Make the gradient larger to allow sliding effect */

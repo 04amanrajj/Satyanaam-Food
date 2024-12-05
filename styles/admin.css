@@ -225,7 +225,6 @@ a {
 .order-card{
   padding: 20px;
 }
-
 li .active{
   color: var(--primary-text-color) !important;
 }
@@ -235,11 +234,11 @@ li .active{
 .osahan-account-page-right .nav-item{
   padding: 10px;
 }
+.osahan-account-page-right .nav-link{
+  padding: 10px 0;
+}
 table{
   margin-bottom: 5px;
-}
-.mb-0{
-  
 }
 @media screen and (max-width: 653px) {
   .row > * {

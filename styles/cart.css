@@ -27,6 +27,7 @@ body {
 }
 
 .summary {
+  display: none;
   background-color: #ddd;
   border-radius: 0 20px 20px 0;
   color: rgb(65, 65, 65);
@@ -40,7 +41,7 @@ body {
 }
 .row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin: 0;
 }
 .text-right {

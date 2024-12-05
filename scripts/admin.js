@@ -74,7 +74,7 @@ async function getOrders(statusFilter = null) {
       orderCard.innerHTML = `
         <h6><span class="badge text-bg-${statusClass}">${
         order.status
-      }</span> Order from ${user.name}</h6>
+      }</span> Order from ${user.name || "Unknown User"}</h6>
         <p>ORDER ID: ${order._id}</p>
         <div class="itemtable"></div>
         <div class="order-actions">
