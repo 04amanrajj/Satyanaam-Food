@@ -35,9 +35,10 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
   orderContainer.classList.add("card", "mb-4", "order-list", "shadow-sm");
 
   let statusClass;
-  if (orderdetails.status === "Preparing") statusClass = "primary";
-  else if (orderdetails.status === "Pending") statusClass = "warning";
+  if (orderdetails.status === "Pending") statusClass = "warning";
+  else if (orderdetails.status === "Preparing") statusClass = "primary";
   else if (orderdetails.status === "Rejected") statusClass = "danger";
+  else if (orderdetails.status === "Cancelled") statusClass = "secondary";
   else statusClass = "success";
 
   const itemsContainerId = `items-${orderdetails._id}`;
@@ -132,7 +133,8 @@ async function getOrders() {
 
       if (
         orderdetails.status.toLowerCase() === "pending" ||
-        orderdetails.status.toLowerCase() === "preparing"
+        orderdetails.status.toLowerCase() === "preparing" ||
+        orderdetails.status.toLowerCase() === "prepared"
       ) {
         await appendOrder(orderdetails, itemsArray, "current-order");
       } else {
