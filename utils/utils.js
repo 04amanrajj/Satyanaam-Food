@@ -104,7 +104,7 @@ async function navbar() {
       </nav>`;
 
     // theme switch
-    let thememode = localStorage.getItem("theme") || "light";
+    let thememode = localStorage.getItem("theme") || "dark";
     document.documentElement.dataset.theme = thememode;
 
     function updateBallPosition(thememode) {
@@ -145,10 +145,12 @@ async function cart_counter() {
   const response = await axios.get(`${baseURL}/cart`, {
     headers: { Authorization: token },
   });
-  console.log(response);
-  const cartCounter = document.querySelector(".cart-counter");
-  cartCounter.textContent = response.data.data.items.length;
-  cartCounter.classList.remove("visually-hidden");
+
+  if (response.status >= 200 && response.status < 300) {
+    const cartCounter = document.querySelector(".cart-counter");
+    cartCounter.textContent = response.data.data.items.length;
+    cartCounter.classList.remove("visually-hidden");
+  }
 }
 
 function loadAdmin() {
