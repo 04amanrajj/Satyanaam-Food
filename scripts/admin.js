@@ -23,6 +23,7 @@ async function getUserInfo() {
           <p>${userinfo.email || ""}</p>
         </div>`;
   } catch (error) {
+    console.error(error);
     tostTopEnd.fire({
       icon: "error",
       title: error.response?.data?.message,
@@ -227,8 +228,139 @@ async function updateOrderStatus(orderId, status) {
   }
 }
 
-// Initial call to fetch all orders
+async function getItems(filters = {}) {
+  try {
+    const response = await axios.get(`${baseURL}/menu?q=${filters}`);
+    const itemDiv = document.querySelector(".items-container");
+    const items = response.data.data;
+
+    // Clear existing items (if any)
+    itemDiv.innerHTML = "";
+
+    items.forEach((element) => {
+      const itemcard = document.createElement("div");
+      itemcard.classList.add("item");
+      itemcard.innerHTML += `
+              <div class="item-description">
+                <h3 class="item-name">${element.name}</h3>
+                <p class="item-og-price"">
+                  Rs.${element.price.toFixed(2)} 
+                  on 20% off - 
+                </p>
+                <p class="item-price"> Rs.${(element.price * 0.8).toFixed(
+                  2
+                )}</p>
+              </div>
+              <div class="cart-box">
+              <p>Available - ${element.available ? "Yes" : "No"}</p>
+              <button class="btn-glow toggle-button fa fa-toggle-${
+                element.available ? "on" : "off"
+              }"></button>
+              <button class="btn-glow edit-button fa fa-edit"></button>
+              <button class="btn-glow remove-button fa fa-trash"></button>
+              </div>
+              <hr>`;
+
+      document
+        .querySelector(".remove-button")
+        ?.addEventListener("click", async () => {
+          try {
+            const response = await axios.delete(
+              `${baseURL}/admin/menu/${element._id}`,
+              {
+                headers: { Authorization: token },
+              }
+            );
+            console.log(response);
+          } catch (error) {
+            console.error(error);
+            tostTopEnd.fire({
+              icon: "error",
+              title: error.response?.data?.message || "Failed to delete items",
+            });
+          }
+        });
+      itemDiv.append(itemcard);
+    });
+  } catch (error) {
+    console.error(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message || "Failed to fetch menu items",
+    });
+  }
+}
+
+async function toggleAvailability(itemId, newStatus, button) {
+  try {
+    await axios.patch(`${baseURL}/admin/menu/${itemId}`, {
+      available: newStatus,
+    });
+    button.textContent = newStatus
+      ? "Mark as Unavailable"
+      : "Mark as Available";
+  } catch (error) {
+    console.error("Failed to toggle availability:", error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message || "Failed to toggle availability",
+    });
+  }
+}
+
+const resetMenuButton = document.getElementById("hardrest");
+resetMenuButton.addEventListener("click", async () => {
+  try {
+    const result = await Swal.fire({
+      title: "Reset Menu?",
+      text: "This can't be undone",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
+
+    const response = await axios.post(
+      `${baseURL}/admin/menu/reset`,
+      {},
+      {
+        headers: { Authorization: token },
+      }
+    );
+    console.log(response);
+
+    tostTopEnd.fire({
+      icon: "success",
+      title: response.message || "Menu Rest: OK",
+    });
+    getItems();
+  } catch (error) {
+    console.error(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message || "Failed to Rest",
+    });
+  }
+});
+
+function editItem(item) {
+  alert(`Editing item: ${item.name} (Price: ₹${item.price.toFixed(2)})`);
+  // Open modal or navigate to edit page with item details.
+}
+
+const search = document.querySelector("#food-search");
+search.addEventListener("input", () => {
+  let value = document.querySelector("#food-search").value;
+  console.log("JI");
+  getItems(value);
+});
+
 getOrders("Pending");
+getItems();
 
 navbar();
 page_footer();
