@@ -235,7 +235,7 @@ async function getItems(filters = {}) {
     const items = response.data.data;
 
     // Clear existing items (if any)
-    itemDiv.innerHTML = "";
+    itemDiv.innerHTML = `<h5>items [${items.length}]</h5>`;
 
     items.forEach((element) => {
       const itemcard = document.createElement("div");
@@ -244,7 +244,7 @@ async function getItems(filters = {}) {
               <div class="item-description">
                 <h3 class="item-name">${element.name}</h3>
                 <p class="item-og-price"">
-                  Rs.${element.price.toFixed(2)} 
+                  __Rs.${element.price.toFixed(2)} 
                   on 20% off - 
                 </p>
                 <p class="item-price"> Rs.${(element.price * 0.8).toFixed(
@@ -253,34 +253,23 @@ async function getItems(filters = {}) {
               </div>
               <div class="cart-box">
               <p>Available - ${element.available ? "Yes" : "No"}</p>
-              <button class="btn-glow toggle-button fa fa-toggle-${
+              <button class="toggle-button fa fa-toggle-${
                 element.available ? "on" : "off"
               }"></button>
-              <button class="btn-glow edit-button fa fa-edit"></button>
-              <button class="btn-glow remove-button fa fa-trash"></button>
+              <button class="edit-button fa fa-edit"></button>
+              <button class="remove-button fa fa-trash"></button>
               </div>
-              <hr>`;
+              `;
 
-      document
-        .querySelector(".remove-button")
-        ?.addEventListener("click", async () => {
-          try {
-            const response = await axios.delete(
-              `${baseURL}/admin/menu/${element._id}`,
-              {
-                headers: { Authorization: token },
-              }
-            );
-            console.log(response);
-          } catch (error) {
-            console.error(error);
-            tostTopEnd.fire({
-              icon: "error",
-              title: error.response?.data?.message || "Failed to delete items",
-            });
-          }
+      const toggleOn = document.querySelectorAll(".fa-toggle-on");
+      toggleOn.forEach((element) => {
+        element.addEventListener("click", (e) => {
+          console.log("TEST");
         });
+      });
+
       itemDiv.append(itemcard);
+      itemDiv.innerHTML += `<hr>`;
     });
   } catch (error) {
     console.error(error);
@@ -355,7 +344,6 @@ function editItem(item) {
 const search = document.querySelector("#food-search");
 search.addEventListener("input", () => {
   let value = document.querySelector("#food-search").value;
-  console.log("JI");
   getItems(value);
 });
 
