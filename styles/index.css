@@ -1,5 +1,6 @@
 /* General Reset */
-
+@import url('https://fonts.cdnfonts.com/css/aurora-condensed');
+@import url('https://fonts.cdnfonts.com/css/eurostile-extended');
 html,
 body {
   scroll-behavior: smooth;
@@ -355,7 +356,7 @@ iframe {
 }
 
 .categoryselected {
-  color: var(--secondary-text-color);
+  color: var(--primary-text-color);
   background: linear-gradient(135deg, #ff4b5c, #007bff);
 }
 
@@ -368,7 +369,7 @@ iframe {
 
 /* Menu items */
 .accordion {
-  max-width: 90%;
+  max-width: 70%;
   margin: auto;
 }
 .accordion-item:first-of-type > .accordion-header .accordion-button,
@@ -380,17 +381,21 @@ iframe {
 }
 .accordion-button:not(.collapsed) {
   color: var(--primary-text-color);
-  background: linear-gradient(135deg, #ff4b5c, #007bff);
-  box-shadow: none;
-  background-size: 200% 100%; /* Make the gradient larger to allow sliding effect */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #28a745, #218838);
   background-position: 100% 0;
   animation: colorSlide 30s ease-in-out infinite;
 }
 
 .accordion-button {
+  border: 2px solid green;
   background-color: var(--bg-primary);
   border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.5rem;
   color: var(--primary-text-color);
+  font-family: 'Eurostile Extended', sans-serif;
 }
 .accordion-header {
   margin: 0;
@@ -409,6 +414,7 @@ iframe {
   transition: background 0.2s linear;
 }
 .accordion-item {
+  margin-bottom: 2rem;
   background-color: var(--bg-primary);
   border: 1px solid var(--bg-accent);
   border-radius: 20px;
@@ -689,9 +695,12 @@ iframe {
     text-align: center;
     cursor: pointer;
     width: 100%;
-    padding: 10px 30px;
-    font-size: 2rem;
+    padding: 10px 25px;
+    font-size: 1.5rem;
     display: flex;
     margin: auto;
+    border-radius: 10px;
+    margin-top: 80px;
+    margin-left: 20px;
   }
 }

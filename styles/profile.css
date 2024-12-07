@@ -63,6 +63,11 @@ body * {
 .osahan-account-page-left,
 .osahan-account-page-right {
   margin-top: 20px;
+  height: 90vh;
+}
+.osahan-account-page-right {
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 .osahan-account-page-left .nav-link {
   padding: 18px 20px;
