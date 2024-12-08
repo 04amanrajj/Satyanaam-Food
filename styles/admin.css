@@ -24,15 +24,7 @@
 
 html,
 body {
-  /* background: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(#f29263),
-    to(#ee5a6f)
-  ); */
   background-color: var(--bg-primary);
-  /* background: linear-gradient(to right, #000000, #4d4d4d); */
   background-size: 200% 100%;
   animation: colorSlide 20s ease-in-out infinite;
   transition: background 0.2s linear;
@@ -384,6 +376,17 @@ table {
 
 .cart-button:active {
   transform: scale(0.95);
+}
+.modal-body{
+  width: 100%;
+  margin: auto;
+}
+.modal-body input,.modal-body select{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
 }
 @media screen and (max-width: 653px) {
   .row > * {
