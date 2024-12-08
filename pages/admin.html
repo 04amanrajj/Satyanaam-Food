@@ -33,6 +33,11 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link
+      rel="shortcut icon"
+      href="https://img.icons8.com/?size=100&id=114317&format=png&color=000000"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="/styles/navbar.css" />
     <link rel="stylesheet" href="/styles/admin.css" />
     <title>Your Profile</title>
@@ -64,20 +69,24 @@
               </li>
             </ul>
             <ul
-            class="nav menu-ul nav-tabs nav-pills flex-column border-0"
-            id="myTab"
-            role="tablist"
+              class="nav menu-ul nav-tabs nav-pills flex-column border-0"
+              id="myTab"
+              role="tablist"
             >
-            <hr />
+              <hr />
               <li class="nav-item">
                 <a class="nav-link" href="" data-stage="">All Items</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="" data-stage="add-item text-danger">Add item</a>
+                <a class="nav-link" href="" data-stage="add-item text-danger"
+                  >Add item</a
+                >
               </li>
               <hr />
               <li class="nav-item">
-                <a class="nav-link bg-danger" href="" id="hardrest">Reset menu</a>
+                <a class="nav-link bg-danger text-white" href="" id="hardrest"
+                  >Reset menu</a
+                >
               </li>
             </ul>
           </div>
@@ -173,6 +182,46 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="editModal"
+      tabindex="-1"
+      aria-labelledby="editModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="editModalLabel">Edit Item</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <input type="text" placeholder="item-name" />
+            <input type="text" placeholder="item-description" />
+            <input type="text" placeholder="item-image-link" />
+            <input type="number" placeholder="item-price" />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary edit-confirm">
+              Save changes
+            </button>
           </div>
         </div>
       </div>

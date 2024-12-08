@@ -241,35 +241,51 @@ async function getItems(filters = {}) {
       const itemcard = document.createElement("div");
       itemcard.classList.add("item");
       itemcard.innerHTML += `
-              <div class="item-description">
-                <h3 class="item-name">${element.name}</h3>
-                <p class="item-og-price"">
-                  __Rs.${element.price.toFixed(2)} 
-                  on 20% off - 
-                </p>
-                <p class="item-price"> Rs.${(element.price * 0.8).toFixed(
-                  2
-                )}</p>
-              </div>
-              <div class="cart-box">
-              <p>Available - ${element.available ? "Yes" : "No"}</p>
-              <button class="toggle-button fa fa-toggle-${
-                element.available ? "on" : "off"
-              }"></button>
-              <button class="edit-button fa fa-edit"></button>
-              <button class="remove-button fa fa-trash"></button>
-              </div>
-              `;
+      <div class="item-description">
+        <h3 class="item-name">${element.name}</h3>
+        <p class="item-og-price">
+          __Rs.${element.price.toFixed(2)} on 20% off -
+        </p>
+        <p class="item-price">
+          Rs.${(element.price * 0.8).toFixed(2)}
+        </p>
+      </div>
+      <div class="cart-box">
+        <p>Available - ${element.available ? "Yes" : "No"}</p>
+        <button 
+          class="toggle-button fa fa-toggle-${
+            element.available ? "on" : "off"
+          }">
+        </button>
+        <button 
+          type="button"
+          class="btn btn-primary edit-button fa fa-edit"
+          data-bs-toggle="modal"
+          data-bs-target="#editModal">
+        </button>
+        <button 
+          class="btn btn-danger remove-button fa fa-trash"
+        </button>
+      </div>
+    `;
 
-      const toggleOn = document.querySelectorAll(".fa-toggle-on");
-      toggleOn.forEach((element) => {
-        element.addEventListener("click", (e) => {
-          console.log("TEST");
-        });
+      const toggleButton = itemcard.querySelector(".toggle-button");
+      toggleButton.addEventListener("click", (e) => {
+        toggleItemAvailability(element._id, !element.available, e.target);
       });
-
-      itemDiv.append(itemcard);
-      itemDiv.innerHTML += `<hr>`;
+      const editButton = itemcard.querySelector(".edit-button");
+      editButton.addEventListener("click", (e) => {
+        editItem(element);
+        // toggleItemAvailability(element._id,)
+      });
+      const removeButton = itemcard.querySelector(".remove-button");
+      removeButton.addEventListener("click", (e) => {
+        removeItem(element._id);
+        // toggleItemAvailability(element._id,)
+      });
+      itemDiv.appendChild(itemcard);
+      const hr = document.createElement("hr");
+      itemDiv.appendChild(hr);
     });
   } catch (error) {
     console.error(error);
@@ -280,19 +296,97 @@ async function getItems(filters = {}) {
   }
 }
 
-async function toggleAvailability(itemId, newStatus, button) {
+async function toggleItemAvailability(itemId, newStatus, button) {
   try {
-    await axios.patch(`${baseURL}/admin/menu/${itemId}`, {
-      available: newStatus,
-    });
-    button.textContent = newStatus
-      ? "Mark as Unavailable"
-      : "Mark as Available";
+    await axios.patch(
+      `${baseURL}/admin/menu/${itemId}`,
+      {
+        available: newStatus,
+      },
+      { headers: { Authorization: token } }
+    );
+
+    button.classList.remove(`fa-toggle-${newStatus ? "on" : "off"}`);
+    getItems();
   } catch (error) {
     console.error("Failed to toggle availability:", error);
     tostTopEnd.fire({
       icon: "error",
       title: error.response?.data?.message || "Failed to toggle availability",
+    });
+  }
+}
+
+async function editItem(item) {
+  const modal = document.querySelector(".modal-body");
+  let categories = await axios.get(baseURL);
+  categories = categories.data.data.menuCategories;
+  console.log(categories); // Array
+
+  modal.innerHTML = `
+    <input class="name" type="text" placeholder="${item.name}" />
+    <input class="description" type="text" placeholder="${item.description}" />
+    <input class="image" type="text" placeholder="${item.image}" />
+    <input class="price" type="number" placeholder="${item.price}" />
+    <select class="item-category text-black">
+      ${categories
+        .map(
+          (category) =>
+            `<option class="text-black" value="${category}" ${
+              category === item.category ? "selected" : ""
+            }>${category}</option>`
+        )
+        .join("")}
+    </select>
+  `;
+
+  const save = document.querySelector(".edit-confirm");
+  save.addEventListener("click", async () => {
+    const payload = {
+      name: modal.querySelector(".name").value || item.name,
+      description:
+        modal.querySelector(".description").value || item.description,
+      image: modal.querySelector(".image").value || item.image,
+      price: modal.querySelector(".price").value || item.price,
+      category: modal.querySelector(".item-category").value || item.category,
+    };
+
+    try {
+      const response = await axios.patch(
+        `${baseURL}/admin/menu/${item._id}`,
+        payload,
+        { headers: { Authorization: token } }
+      );
+      console.log(response);
+      tostTopEnd.fire({
+        icon: "success",
+        title: response?.data?.message || "Dish updated",
+      });
+      getItems();
+    } catch (error) {
+      console.error(error);
+      tostTopEnd.fire({
+        icon: "error",
+        title: error.response?.data?.message || "Failed to Update",
+      });
+    }
+  });
+}
+
+async function removeItem(id) {
+  try {
+    const response = await axios.delete(`${baseURL}/admin/menu/${id}`);
+    console.log(response);
+    tostTopEnd.fire({
+      icon: "success",
+      title: response?.data?.message || "Dish removed",
+    });
+    getItems();
+  } catch (error) {
+    console.error(error);
+    tostTopEnd.fire({
+      icon: "error",
+      title: error.response?.data?.message || "Failed to delete",
     });
   }
 }
@@ -336,11 +430,6 @@ resetMenuButton.addEventListener("click", async () => {
   }
 });
 
-function editItem(item) {
-  alert(`Editing item: ${item.name} (Price: ₹${item.price.toFixed(2)})`);
-  // Open modal or navigate to edit page with item details.
-}
-
 const search = document.querySelector("#food-search");
 search.addEventListener("input", () => {
   let value = document.querySelector("#food-search").value;
@@ -352,3 +441,10 @@ getItems();
 
 navbar();
 page_footer();
+
+// const myModal = document.getElementById('myModal')
+// const myInput = document.getElementById('myInput')
+
+// myModal.addEventListener('shown.bs.modal', () => {
+//   myInput.focus()
+// })
