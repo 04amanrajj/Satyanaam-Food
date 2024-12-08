@@ -126,9 +126,8 @@ async function navbar() {
       updateBallPosition(thememode);
     });
 
-    cart_counter();
-
     miniprofile = navbar.querySelector(".profile-dropdown");
+    if (currUser) cart_counter();
     if (currUser?.role == "admin") loadAdmin();
     else if (currUser?.role == "user") loadUser();
   } catch (error) {
@@ -141,15 +140,19 @@ async function navbar() {
 }
 
 async function cart_counter() {
-  const token = localStorage.getItem("token");
-  const response = await axios.get(`${baseURL}/cart`, {
-    headers: { Authorization: token },
-  });
-
-  if (response.status >= 200 && response.status < 300) {
-    const cartCounter = document.querySelector(".cart-counter");
-    cartCounter.textContent = response.data.data.items.length;
-    cartCounter.classList.remove("visually-hidden");
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${baseURL}/cart`, {
+      headers: { Authorization: token },
+    });
+    if (!response.statusText) return;
+    if (response.status >= 200 && response.status < 300) {
+      const cartCounter = document.querySelector(".cart-counter");
+      cartCounter.textContent = response.data.data.items.length;
+      cartCounter.classList.remove("visually-hidden");
+    }
+  } catch (error) {
+    // console.error(error);
   }
 }
 

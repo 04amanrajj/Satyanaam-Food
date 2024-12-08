@@ -249,7 +249,7 @@ async function updateQuantityInBackend(itemId, quantity) {
         headers: { Authorization: token },
       });
     } else {
-      await axios.put(
+      await axios.patch(
         `${baseURL}/cart/${itemId}`,
         { quantity },
         { headers: { Authorization: token } }
