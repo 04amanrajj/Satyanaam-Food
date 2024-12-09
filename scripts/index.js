@@ -244,18 +244,15 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
         // Add to Cart Button Click
         cartButton.addEventListener("click", async () => {
           const token = localStorage.getItem("token");
-          if (!token) {
-            tostTopEnd.fire({
-              icon: "info",
-              title: "Please log in to add items to the cart",
-            });
 
-            setTimeout(
-              () => (window.location.href = "../pages/login.html"),
-              2000
-            );
-            return;
-          }
+          setTimeout(() => {
+            if (!token) {
+              tostBottomEnd.fire({
+                icon: "info",
+                title: "logged in as guest",
+              });
+            }
+          }, 2000);
 
           if (!element.available) {
             tostTopEnd.fire({
