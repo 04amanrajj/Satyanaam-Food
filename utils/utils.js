@@ -59,7 +59,7 @@ async function navbar() {
             </li>
               <!-- cart -->
               <li class="nav-item">
-                <a class="nav-link cart position-relative">
+                <a class="nav-link cart position-relative" href="#">
                   <i class="fa fa-shopping-cart"></i>
                   Cart<span
                             class="cart-counter position-absolute top-1  visually-hidden start-100 translate-middle badge rounded-pill bg-danger"
