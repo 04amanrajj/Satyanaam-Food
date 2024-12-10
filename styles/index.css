@@ -1,6 +1,6 @@
 /* General Reset */
-@import url('https://fonts.cdnfonts.com/css/aurora-condensed');
-@import url('https://fonts.cdnfonts.com/css/eurostile-extended');
+@import url("https://fonts.cdnfonts.com/css/aurora-condensed");
+@import url("https://fonts.cdnfonts.com/css/eurostile-extended");
 html,
 body {
   scroll-behavior: smooth;
@@ -227,6 +227,10 @@ h3 {
   background: linear-gradient(135deg, #007bff, #ff4b5c);
   border-radius: 10px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Embed Map */
@@ -242,14 +246,6 @@ iframe {
   height: 100%;
   border: none;
   border-radius: 10px;
-}
-
-/* Optional: Center the map container */
-.map-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Category row */
@@ -374,31 +370,42 @@ iframe {
 }
 .accordion-item:first-of-type > .accordion-header .accordion-button,
 .accordion-item:first-of-type {
-  border-radius: 10px;
+  border-radius: 20px;
 }
 .accordion-item {
   border: none !important;
 }
 .accordion-button:not(.collapsed) {
   color: var(--primary-text-color);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(135deg, #28a745, #218838);
+  background: var(--bg-primary);
   background-position: 100% 0;
-  animation: colorSlide 30s ease-in-out infinite;
+  box-shadow: none;
+  border-radius: 20px;
 }
 
 .accordion-button {
-  border: 2px solid green;
-  background-color: var(--bg-primary);
-  border-radius: 10px;
+  border-radius: 20px;
+  display: flex;
+  background: var(--bg-primary);
+  justify-content: space-between;
+  width: max-content;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  padding: 10px 15px;
   color: var(--primary-text-color);
-  font-family: 'Eurostile Extended', sans-serif;
+  transition: all 0.3ms ease-in-out;
 }
+.accordion-button:hover {
+  box-shadow: rgba(var(--primary-color), 1) 0px 0px 20px 0px;
+}
+
 .accordion-header {
+  width: max-content;
   margin: 0;
+  margin-left: 2%;
+  background: linear-gradient(135deg, #007bff, #ff4b5c);
+  padding: 1px;
+  border-radius: 20px;
 }
 .accordion-button:focus {
   box-shadow: none;
@@ -609,6 +616,18 @@ iframe {
     margin: auto;
     max-width: 100%;
     padding: 10px;
+  }
+  .accordion-item:first-of-type > .accordion-header .accordion-button,
+  .accordion-item:first-of-type {
+    border-radius: 10px;
+  }
+  .accordion-header{
+    margin-left: 0;
+  }
+  .accordion-header,
+  .accordion-button,.accordion-button:not(.collapsed) {
+    border-radius: 10px;
+    width: 100%;
   }
   .accordion-body {
     padding: 10px 0px;

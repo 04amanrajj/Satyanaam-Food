@@ -17,7 +17,6 @@ body {
   width: 90%;
   box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 20px;
-  height: 90vh;
   border: transparent;
 }
 
@@ -34,7 +33,6 @@ body {
   background-color: #ddd;
   border-radius: 0 20px 20px 0;
   color: rgb(65, 65, 65);
-  height: 90vh;
   overflow-y: scroll;
   scrollbar-width: none;
 }
