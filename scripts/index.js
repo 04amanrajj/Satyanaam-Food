@@ -10,6 +10,7 @@ import {
   stopLoading,
 } from "../utils/utils.js";
 let filters = {};
+let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 async function restaurent_info() {
   try {
     const response = await axios.get(baseURL);
@@ -263,26 +264,29 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
             cartButton.classList.add("outofstock");
             return;
           }
-          try {
-            const response = await axios.post(
-              `${baseURL}/cart`,
-              { itemid: element._id, quantity: 1 },
-              { headers: { Authorization: token } }
-            );
-            stopLoading();
-            tostTopEnd.fire({
-              icon: "success",
-              title: response.data.message,
-            });
-            cart_counter();
-            console.log(response.data);
-          } catch (error) {
-            console.error(error);
-            tostTopEnd.fire({
-              icon: "error",
-              title: error.response?.data?.message || error.name,
-            });
-          }
+
+          cartItems.push({ itemid: element._id, quantity: 1 });
+          localStorage.setItem("cart", JSON.stringify(cartItems));
+          // try {
+          //   const response = await axios.post(
+          //     `${baseURL}/cart`,
+          //     { itemid: element._id, quantity: 1 },
+          //     { headers: { Authorization: token } }
+          //   );
+          //   stopLoading();
+          //   tostTopEnd.fire({
+          //     icon: "success",
+          //     title: response.data.message,
+          //   });
+          //   cart_counter();
+          //   console.log(response.data);
+          // } catch (error) {
+          //   console.error(error);
+          //   tostTopEnd.fire({
+          //     icon: "error",
+          //     title: error.response?.data?.message || error.name,
+          //   });
+          // }
         });
 
         categoryBody.appendChild(itemDiv);
