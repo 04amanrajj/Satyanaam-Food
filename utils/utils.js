@@ -140,14 +140,10 @@ async function navbar() {
             { itemid: item.itemid, quantity: item.quantity },
             { headers: { Authorization: token } }
           );
-          tostTopEnd.fire({
-            icon: "success",
-            title: response.data.message,
-          });
           cart_counter();
           console.log(response);
         }
-        localStorage.removeItem("cart");
+        // localStorage.removeItem("cart");
         window.location.href = "/pages/cart.html";
       } catch (error) {
         console.error(error);
@@ -166,23 +162,15 @@ async function navbar() {
       title: error.message,
     });
   }
+  cart_counter();
 }
 
 async function cart_counter() {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(`${baseURL}/cart`, {
-      headers: { Authorization: token },
-    });
-    if (!response.statusText) return;
-    if (response.status >= 200 && response.status < 300) {
-      const cartCounter = document.querySelector(".cart-counter");
-      cartCounter.textContent = response.data.data.items.length;
-      cartCounter.classList.remove("visually-hidden");
-    }
-  } catch (error) {
-    // console.error(error);
-  }
+  const cartLength = JSON.parse(localStorage.getItem("cart")).length;
+  if (cartLength <= 0) return;
+  const cartCounter = document.querySelector(".cart-counter");
+  cartCounter.textContent = cartLength;
+  cartCounter.classList.remove("visually-hidden");
 }
 
 function loadAdmin() {
