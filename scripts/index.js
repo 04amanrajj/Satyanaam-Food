@@ -6,15 +6,11 @@ import {
   tostTopEnd,
   tostBottomEnd,
   cart_counter,
-  loading,
-  stopLoading,
 } from "../utils/utils.js";
 let filters = {};
-let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 async function restaurent_info() {
   try {
     const response = await axios.get(baseURL);
-    stopLoading();
     const restaurantDetails = document.querySelector(".details-container");
 
     const restaurent = response.data.data.restaurantDetails;
@@ -149,6 +145,41 @@ async function restaurent_info() {
     });
   }
 }
+
+function addToCart(element, userName, userPhone) {
+  let userCart = JSON.parse(localStorage.getItem("cart")) || {
+    items: [],
+    totalprice: 0,
+    userPhone,
+    userName,
+  };
+
+  userCart.items.push({ itemid: element._id, item: element, quantity: 1 });
+  console.log(userCart);
+
+  const combinedItems = {};
+  userCart.items.forEach((item) => {
+    const itemid = item.itemid;
+    if (combinedItems[itemid]) {
+      combinedItems[itemid].quantity += item.quantity;
+    } else {
+      combinedItems[itemid] = { ...item };
+    }
+  });
+
+  userCart.items = Object.values(combinedItems);
+  userCart.userName = userName;
+  userCart.userPhone = userPhone;
+  userCart.totalprice = userCart.items.reduce((total, item) => {
+    return total + item.quantity * item.item.price;
+  }, 0);
+
+  userCart.totalprice.toFixed(2);
+
+  localStorage.setItem("cart", JSON.stringify(userCart));
+  cart_counter();
+}
+
 async function restaurent_menu(pagenumber = 1, params = {}) {
   try {
     if (Object.keys(filters).length != 0) {
@@ -159,7 +190,6 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     const response = await axios.get(`${baseURL}/menu?page=${pagenumber}`, {
       params: finalFilters,
     });
-    stopLoading();
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
 
@@ -265,15 +295,24 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
             return;
           }
 
-          cartItems.push({ itemid: element._id, quantity: 1 });
-          localStorage.setItem("cart", JSON.stringify(cartItems));
+          const getUser = JSON.parse(localStorage.getItem("user"));
+          const userName = getUser?.name || "Guest";
+          const userPhone = getUser?.phone || 9876543210;
+          console.log(getUser);
+          // user:"{"_id":"673cf537f2519b3d0e6d703f","name":"Aman Raj","email":"amanprajapat322@gmail.com","role":"admin","wishlist":["673cfc303501a61523e5426e"]}"
+          addToCart(element, userName, userPhone);
+
+          tostTopEnd.fire({
+            icon: "success",
+            title: "Added to cart",
+          });
+
           // try {
           //   const response = await axios.post(
           //     `${baseURL}/cart`,
           //     { itemid: element._id, quantity: 1 },
           //     { headers: { Authorization: token } }
           //   );
-          //   stopLoading();
           //   tostTopEnd.fire({
           //     icon: "success",
           //     title: response.data.message,
@@ -328,4 +367,3 @@ restaurent_info();
 restaurent_menu();
 page_footer();
 cart_counter();
-loading();
