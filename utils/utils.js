@@ -59,7 +59,7 @@ async function navbar() {
             </li>
               <!-- cart -->
               <li class="nav-item">
-                <a class="nav-link cart position-relative" href="#">
+                <a class="nav-link cart position-relative" href="/pages/cart.html">
                   <i class="fa fa-shopping-cart"></i>
                   Cart<span
                             class="cart-counter position-absolute top-1  visually-hidden start-100 translate-middle badge rounded-pill bg-danger"
@@ -126,31 +126,6 @@ async function navbar() {
       updateBallPosition(thememode);
     });
 
-    // cart items
-    const cartItems = JSON.parse(localStorage.getItem("cart")); //array of obj
-    console.log(cartItems);
-    const cartButton = document.querySelector(".cart");
-    cartButton.addEventListener("click", async () => {
-      try {
-        const token = localStorage.getItem("token");
-        for (let item of cartItems) {
-          console.log(item);
-          const response = await axios.post(
-            `${baseURL}/cart`,
-            { itemid: item.itemid, quantity: item.quantity },
-            { headers: { Authorization: token } }
-          );
-          cart_counter();
-          console.log(response);
-        }
-        // localStorage.removeItem("cart");
-        window.location.href = "/pages/cart.html";
-      } catch (error) {
-        console.error(error);
-      }
-      window.location.href = "/pages/cart.html";
-    });
-
     miniprofile = navbar.querySelector(".profile-dropdown");
     if (currUser) cart_counter();
     if (currUser?.role == "admin") loadAdmin();
@@ -166,11 +141,14 @@ async function navbar() {
 }
 
 async function cart_counter() {
-  const cartLength = JSON.parse(localStorage.getItem("cart")).length;
+  const userCart = JSON.parse(localStorage.getItem("cart"));
+  const cartLength = userCart?.items?.length;
   if (cartLength <= 0) return;
   const cartCounter = document.querySelector(".cart-counter");
-  cartCounter.textContent = cartLength;
-  cartCounter.classList.remove("visually-hidden");
+  if (cartCounter) {
+    cartCounter.textContent = cartLength;
+    cartCounter.classList.remove("visually-hidden");
+  }
 }
 
 function loadAdmin() {
