@@ -6,11 +6,15 @@ import {
   tostTopEnd,
   tostBottomEnd,
   cart_counter,
+  loading,
+  stopLoading,
 } from "../utils/utils.js";
 let filters = {};
 async function restaurent_info() {
   try {
+    loading();
     const response = await axios.get(baseURL);
+    stopLoading();
     const restaurantDetails = document.querySelector(".details-container");
 
     const restaurent = response.data.data.restaurantDetails;

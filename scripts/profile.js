@@ -1,12 +1,21 @@
-import { baseURL, navbar, page_footer, tostTopEnd } from "../utils/utils.js";
+import {
+  baseURL,
+  loading,
+  navbar,
+  page_footer,
+  stopLoading,
+  tostTopEnd,
+} from "../utils/utils.js";
 const token = localStorage.getItem("token");
 const user = JSON.parse(localStorage.getItem("person"));
 
 async function getUserInfo() {
   try {
+    loading();
     const response = await axios.get(`${baseURL}/user`, {
       headers: { Authorization: token },
     });
+    stopLoading();
     const userinfo = response.data.message;
 
     const userDiv = document.querySelector(".osahan-user-media");
@@ -22,6 +31,7 @@ async function getUserInfo() {
           <p>${userinfo.email || ""}</p>
         </div>`;
   } catch (error) {
+    stopLoading();
     const userDiv = document.querySelector(".osahan-user-media");
     userDiv.innerHTML = `
         <img
@@ -109,7 +119,7 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
     row.innerHTML = `
             <th scope="row">${index + 1}</th>
             <td>${ele.name}</td>
-            <td>${ele.quantity} x (${ele.price * 0.8})</td>
+            <td>${ele.quantity} x (${(ele.price * 0.8).toFixed(2)})</td>
             <td>Rs.${(ele.quantity * (ele.price * 0.8)).toFixed(2)}</td>`;
     tbody.appendChild(row);
   });
@@ -120,6 +130,7 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
 
 async function getOrders() {
   try {
+    loading();
     const response = await axios.post(
       `${baseURL}/order`,
       { userName: user.userName, userPhone: user.userPhone },
@@ -127,7 +138,7 @@ async function getOrders() {
         headers: { Authorization: token },
       }
     );
-
+    stopLoading();
     const orders = response.data;
     updateOrderTracker(orders[orders.length - 1].status);
     const currentOrderDiv = document.querySelector(".current-order");
@@ -159,6 +170,7 @@ async function getOrders() {
       }
     }
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",

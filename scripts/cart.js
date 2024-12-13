@@ -1,25 +1,14 @@
 import {
   baseURL,
   cart_counter,
+  loading,
   navbar,
   page_footer,
   tostTopEnd,
+  stopLoading,
   whatsAppNumber,
 } from "../utils/utils.js";
 const token = localStorage.getItem("token");
-
-async function fetchCart() {
-  try {
-    const response = await axios.get(`${baseURL}/cart`, {
-      headers: { Authorization: token },
-    });
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error(error.response?.data?.message || "Failed to fetch cart.");
-  }
-}
 
 function calculateTotal(items, shippingCost) {
   const itemsTotal = items.reduce(
@@ -79,6 +68,7 @@ async function updateItemQuantity(cart, index, change) {
 }
 
 async function ordersummary() {
+  loading();
   const cart = JSON.parse(localStorage.getItem("cart"));
   const summary = document.querySelector(".summary");
   if (cart.items) summary.style.display = "block";
@@ -213,6 +203,7 @@ async function ordersummary() {
       const userName = document.getElementById("full-name").value.trim();
       const userPhone = document.getElementById("contact-number").value.trim();
       const userMSG = document.getElementById("custom-message").value.trim();
+      const person = { userName, userPhone };
 
       // Validate inputs
       if (!userAddress || !userName || !userPhone) {
@@ -223,16 +214,20 @@ async function ordersummary() {
         return;
       }
 
+      localStorage.setItem("person", JSON.stringify(person));
+
       cart.totalprice *= 0.8;
       let confirmOrder = { cart, userName, userPhone, userAddress };
       if (userMSG) confirmOrder.userMSG = userMSG;
       confirmOrder.homeDelivery =
         cart.orderType === "Home Delivery" ? true : false;
 
-      await axios.post(`${baseURL}/order`, confirmOrder, {
+      loading();
+
+      await axios.post(`${baseURL}/order/new`, confirmOrder, {
         headers: { Authorization: token },
       });
-
+      stopLoading();
       // Generate the WhatsApp URL
       const phone = whatsAppNumber;
       const message = sendToChat(confirmOrder);
@@ -248,6 +243,7 @@ async function ordersummary() {
         localStorage.removeItem("cart");
       });
     } catch (error) {
+    stopLoading();
       console.error(error);
       tostTopEnd.fire({
         icon: "error",
@@ -302,3 +298,4 @@ ordersummary();
 navbar();
 page_footer();
 cart_counter();
+    stopLoading();

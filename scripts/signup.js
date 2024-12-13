@@ -1,4 +1,4 @@
-import { baseURL, navbar } from "../utils/utils.js";
+import { baseURL, loading, navbar, stopLoading } from "../utils/utils.js";
 
 const form = document.getElementById("signupForm");
 const errorMessage = document.getElementById("error-message");
@@ -25,6 +25,7 @@ form.addEventListener("submit", async (e) => {
     }
     const role = "user";
     // Send a POST request to the backend
+    loading();
     const response = await axios.post(`${baseURL}/user/register`, {
       name,
       email,
@@ -38,6 +39,7 @@ form.addEventListener("submit", async (e) => {
     window.location.href = "./login.html";
   } catch (error) {
     // Display error message
+    stopLoading();
     console.log(error);
     const message =
       error.response?.data?.message || "Signup failed. Try again.";
@@ -46,3 +48,4 @@ form.addEventListener("submit", async (e) => {
   }
 });
 navbar();
+stopLoading();

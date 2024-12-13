@@ -1,12 +1,21 @@
-import { baseURL, navbar, page_footer, tostTopEnd } from "../utils/utils.js";
+import {
+  baseURL,
+  loading,
+  navbar,
+  page_footer,
+  stopLoading,
+  tostTopEnd,
+} from "../utils/utils.js";
 const token = localStorage.getItem("token");
 
 async function getUserInfo() {
   try {
+    loading();
     const response = await axios.get(`${baseURL}/user`, {
       headers: { Authorization: token },
     });
     const userinfo = response.data.message;
+    stopLoading();
 
     const userDiv = document.querySelector(".osahan-user-media");
     userDiv.innerHTML = `
@@ -23,6 +32,7 @@ async function getUserInfo() {
           <p>${userinfo.email || ""}</p>
         </div>`;
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",
@@ -38,9 +48,11 @@ async function getOrders(statusFilter = null) {
       ? `${baseURL}/admin/order?status=${statusFilter}`
       : `${baseURL}/admin/order`;
 
+    loading();
     const response = await axios.get(url, {
       headers: { Authorization: token },
     });
+    stopLoading();
     const orders = response.data;
 
     const userOrders = document.querySelector(".order-container");
@@ -52,6 +64,7 @@ async function getOrders(statusFilter = null) {
     }
 
     let pendingOrdersCount = 0;
+    console.log(orders);
     for (const order of orders) {
       const userResponse = await axios.post(
         `${baseURL}/admin/user`,
@@ -61,10 +74,11 @@ async function getOrders(statusFilter = null) {
         }
       );
       const user = userResponse.data.message[0];
-
       let statusClass;
+      let grammerfix = "for";
       if (order.status === "Pending") {
         pendingOrdersCount++, (statusClass = "warning");
+        grammerfix = "from";
       } else if (order.status === "Preparing") statusClass = "primary";
       else if (order.status === "Rejected") statusClass = "danger";
       else if (order.status === "Cancelled") statusClass = "secondary";
@@ -75,13 +89,27 @@ async function getOrders(statusFilter = null) {
       orderCard.innerHTML = `
         <h6><span class="badge text-bg-${statusClass}">${
         order.status
-      }</span> Order from ${user.name || "Unknown User"}</h6>
-        <p>ORDER ID: ${order._id}</p>
+      }</span> Order ${grammerfix} ${order.userName || "Unknown User"}</h6>
+      <p>ORDER ID: ${order._id}</p>
+      <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        More details
+        </button>
+      </p>
+      <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+            <p>Address: ${order.userAddress}</p>
+            ${order.userMSG ? `<p>Custom message: ${order.userMSG}</p>` : ""}
+            <a href="tel:+91 ${order.userPhone}">
+              <button class="btn btn-success">Call ${order.userPhone}</button>
+            </a>
+          </div>
+        </div>
         <div class="itemtable"></div>
         <div class="order-actions">
         <p class="mb-0 text-black text-primary pt-2">
           <span class="text-black">Total Price </span>
-          <strong>Rs.${(order.totalprice * 0.8).toFixed(2)}<strong>
+          <strong>Rs.${order.totalprice.toFixed(2)}<strong>
         </p>
           ${
             order.status === "Pending"
@@ -125,8 +153,8 @@ async function getOrders(statusFilter = null) {
         tbody.appendChild(row);
       });
       itemsTable.append(table);
-
       userOrders.append(orderCard);
+      userOrders.innerHTML += "<hr>";
     }
 
     const counter = document.querySelector(".counter");
@@ -171,6 +199,7 @@ async function getOrders(statusFilter = null) {
       });
     });
   } catch (error) {
+    stopLoading();
     const userOrders = document.querySelector(".order-container");
     userOrders.innerHTML = `<strong>No orders for this stage!</strong>`;
     console.error(error);
@@ -199,6 +228,7 @@ ordersTab.forEach((tab) => {
 async function updateOrderStatus(orderId, status) {
   try {
     status.toLowerCase();
+    loading();
     await axios.patch(
       `${baseURL}/admin/order/${orderId}`,
       { status },
@@ -206,6 +236,7 @@ async function updateOrderStatus(orderId, status) {
         headers: { Authorization: token },
       }
     );
+    stopLoading();
     tostTopEnd.fire({
       icon: "success",
       title: `Order ${status.toLowerCase()}`,
@@ -220,6 +251,7 @@ async function updateOrderStatus(orderId, status) {
     }
     getOrders(status);
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",
@@ -230,10 +262,11 @@ async function updateOrderStatus(orderId, status) {
 
 async function getItems(filters = {}) {
   try {
+    loading();
     const response = await axios.get(`${baseURL}/menu?q=${filters}`);
     const itemDiv = document.querySelector(".items-container");
     const items = response.data.data;
-
+    stopLoading();
     // Clear existing items (if any)
     itemDiv.innerHTML = `<h5>items [${items.length}]</h5>`;
 
@@ -288,6 +321,7 @@ async function getItems(filters = {}) {
       itemDiv.appendChild(hr);
     });
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",
@@ -352,11 +386,13 @@ async function editItem(item) {
     };
 
     try {
+      loading();
       const response = await axios.patch(
         `${baseURL}/admin/menu/${item._id}`,
         payload,
         { headers: { Authorization: token } }
       );
+      stopLoading();
       console.log(response);
       tostTopEnd.fire({
         icon: "success",
@@ -364,6 +400,7 @@ async function editItem(item) {
       });
       getItems();
     } catch (error) {
+      stopLoading();
       console.error(error);
       tostTopEnd.fire({
         icon: "error",
@@ -406,7 +443,7 @@ resetMenuButton.addEventListener("click", async () => {
     });
 
     if (!result.isConfirmed) return;
-
+    loading();
     const response = await axios.post(
       `${baseURL}/admin/menu/reset`,
       {},
@@ -414,6 +451,7 @@ resetMenuButton.addEventListener("click", async () => {
         headers: { Authorization: token },
       }
     );
+    stopLoading();
     console.log(response);
 
     tostTopEnd.fire({
@@ -422,6 +460,7 @@ resetMenuButton.addEventListener("click", async () => {
     });
     getItems();
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",
@@ -441,10 +480,4 @@ getItems();
 
 navbar();
 page_footer();
-
-// const myModal = document.getElementById('myModal')
-// const myInput = document.getElementById('myInput')
-
-// myModal.addEventListener('shown.bs.modal', () => {
-//   myInput.focus()
-// })
+// stopLoading();

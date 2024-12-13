@@ -262,7 +262,7 @@ iframe {
   transition: all 0.3ms ease-in-out;
 }
 .filter-row {
-  z-index: 1000;
+  z-index: 10;
   position: sticky;
   top: 0;
 }
@@ -306,9 +306,9 @@ iframe {
 .filter-item {
   margin: 5px;
   padding: 8px 12px;
-  background: var(--bg-accent);
   color: var(--primary-text-color);
   border-radius: 20px;
+  border: 1px solid var(--bg-accent);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -589,7 +589,6 @@ iframe {
     margin: 10px;
   }
 
-  .category-item,
   .filter-item {
     padding: 8px;
   }
@@ -722,4 +721,8 @@ iframe {
     margin-top: 80px;
     margin-left: 20px;
   }
+}
+
+.category-row{
+opacity: 0;
 }

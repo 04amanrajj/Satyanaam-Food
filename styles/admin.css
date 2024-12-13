@@ -377,16 +377,20 @@ table {
 .cart-button:active {
   transform: scale(0.95);
 }
-.modal-body{
+.modal-body {
   width: 100%;
   margin: auto;
 }
-.modal-body input,.modal-body select{
+.modal-body input,
+.modal-body select {
   box-sizing: border-box;
   width: 100%;
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
+}
+#hardrest{
+  margin-bottom: 20px;
 }
 @media screen and (max-width: 653px) {
   .row > * {
@@ -421,6 +425,11 @@ table {
   [aria-expanded="true"] {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+  }
+  .osahan-account-page-left,
+  .osahan-account-page-right {
+    margin-top: 20px;
+    height: min-content;
   }
 }
 

@@ -210,7 +210,7 @@ a {
   .osahan-account-page-right {
     height: fit-content;
   }
-  .osahan-account-page-left{
+  .osahan-account-page-left {
     /* overflow-y: visible; */
     height: 90%;
   }
@@ -228,10 +228,10 @@ a {
     height: min-content !important;
   }
   .profile-container .row {
-    height: min-content;
+    min-height: fit-content;
   }
   .accordion-header {
-    background-color: var(--bg-primary);
+    background-color: transparent;
   }
   .accordion-body {
     padding: 10px 0px;
@@ -293,13 +293,12 @@ a {
   padding-left: 0.4rem;
 }
 .tracking-item .tracking-content {
-  padding: 0.5rem 0.8rem;
-  background-color: var(--bg-primary);
   border-radius: 0.5rem;
+  color: #888;
 }
 .tracking-item .tracking-content span {
   display: block;
-  font-size: 13px;
+  font-size: 1rem;
 }
 .tracking-item .tracking-icon {
   position: absolute;
@@ -333,8 +332,8 @@ a {
   padding-left: 0.4rem;
 }
 .tracking-item-pending .tracking-content {
-  padding: 0.5rem 0.8rem;
-  background-color: #f4f4f4;
+  padding: 0.5rem 0;
+  /* background-color: #f4f4f4; */
   border-radius: 0.5rem;
 }
 .tracking-item-pending .tracking-content span {

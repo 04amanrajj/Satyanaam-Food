@@ -1,4 +1,4 @@
-import { baseURL, navbar } from "../utils/utils.js";
+import { baseURL, loading, navbar, stopLoading } from "../utils/utils.js";
 const form = document.getElementById("loginForm");
 const errorMessage = document.getElementById("error-message");
 
@@ -30,8 +30,9 @@ form.addEventListener("submit", async (e) => {
   submitButton.textContent = "Logging in...";
 
   try {
+    loading();
     const response = await axios.post(`${baseURL}/user/login`, requestData);
-
+    stopLoading();
     // Store token and user data
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -49,4 +50,5 @@ form.addEventListener("submit", async (e) => {
     submitButton.textContent = "Login";
   }
 });
-navbar()
+navbar();
+stopLoading();
