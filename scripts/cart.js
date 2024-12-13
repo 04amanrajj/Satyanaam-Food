@@ -4,6 +4,7 @@ import {
   navbar,
   page_footer,
   tostTopEnd,
+  whatsAppNumber,
 } from "../utils/utils.js";
 const token = localStorage.getItem("token");
 
@@ -61,18 +62,19 @@ async function updateItemQuantity(cart, index, change) {
   const totalPrice = calculateTotal(cart.items, shippingCost);
 
   // Update DOM for prices and discount
-  document.querySelector("#total-price").textContent = `Rs.${(
-    totalPrice * 0.8
-  ).toFixed(2)}`;
-  document.querySelector(".discount").textContent = `- Rs.${(
-    totalPrice * 0.2
-  ).toFixed(2)}`;
   document.querySelector(".total-price").textContent = `Rs.${totalPrice.toFixed(
     2
   )}`;
+  document.querySelector(".discount").textContent = `- Rs.${(
+    totalPrice * 0.2
+  ).toFixed(2)}`;
+  document.querySelector("#total-price").textContent = `Rs.${(
+    totalPrice * 0.8
+  ).toFixed(2)}`;
 
   // Save updated cart to localStorage
   cart.totalprice = totalPrice;
+  cart.orderType = shippingCost > 0 ? "Home Delivery" : "Pick Up";
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
@@ -89,8 +91,11 @@ async function ordersummary() {
         <form>
           <p>SHIPPING</p>
           <select id="delivery-opt">
-            <option value="0" class="text-muted" selected>Self Pickup FREE</option>
-            <option value="40" class="text-muted">Home Delivery Rs.40</option>
+            <option value="0" class="text-muted">Self Pickup FREE</option>
+            <option value="40" class="text-muted"
+            ${
+              cart.orderType === "Home Delivery" ? "selected" : ""
+            }>Home Delivery Rs.40</option>
           </select>
           <p>DISCOUNT CODE</p>
           <input id="code" placeholder="Enter code" disabled/>
@@ -101,7 +106,7 @@ async function ordersummary() {
         >
           <div class="row">
             <div class="col">PRICE</div>
-            <div class="col text-right total-price">${cart?.totalprice?.toFixed(
+            <div class="col text-right total-price">Rs.${cart?.totalprice?.toFixed(
               2
             )}</div>
           </div>
@@ -158,11 +163,19 @@ async function ordersummary() {
     document.querySelector(
       ".total-price"
     ).textContent = `Rs.${totalPrice.toFixed(2)}`;
+
+    cart.orderType = shippingCost > 0 ? "Home Delivery" : "Pick Up";
+    cart.totalprice = totalPrice;
+    localStorage.setItem("cart", JSON.stringify(cart));
   });
 
   const checkout = document.querySelector(".checkout");
   checkout.addEventListener("click", (e) => {
     e.preventDefault();
+    document.querySelector(".summary b").innerHTML = `
+    <a href="./cart.html">Go back</a>
+    <hr>
+        `;
     document.querySelector(".summary form").innerHTML = `
         <p><strong>DELIVERY ADDRESS</strong></p>
         <textarea id="address" name="address" placeholder="Enter your full delivery address" rows="2" required></textarea>
@@ -182,10 +195,14 @@ async function ordersummary() {
 
     checkout.classList.add("hide");
     placeOrder.classList.remove("hide");
-    console.log(checkout);
+    document
+      .querySelectorAll(".increment")
+      .forEach((ele) => (ele.disabled = true));
+    document
+      .querySelectorAll(".decrement")
+      .forEach((ele) => (ele.disabled = true));
 
     const nextDiv = document.querySelector(".summary");
-    console.log(nextDiv);
     nextDiv.scrollIntoView({ behavior: "smooth" });
   });
 
@@ -206,12 +223,22 @@ async function ordersummary() {
         return;
       }
 
+      cart.totalprice *= 0.8;
       let confirmOrder = { cart, userName, userPhone, userAddress };
       if (userMSG) confirmOrder.userMSG = userMSG;
+      confirmOrder.homeDelivery =
+        cart.orderType === "Home Delivery" ? true : false;
 
       await axios.post(`${baseURL}/order`, confirmOrder, {
         headers: { Authorization: token },
       });
+
+      // Generate the WhatsApp URL
+      const phone = whatsAppNumber;
+      const message = sendToChat(confirmOrder);
+      const whatsappURL = `https://wa.me/${phone}?text=${message}`;
+
+      window.open(whatsappURL);
 
       Swal.fire({
         title: "Order Placed",
@@ -250,6 +277,25 @@ function addQuantityListeners(cart) {
       updateItemQuantity(cart, index, -1);
     });
   });
+}
+
+function sendToChat(order) {
+  let message = `Order Details:\n`;
+  message += `*Customer Name*: ${order.userName || order.cart.userName}\n`;
+  message += `*Customer Phone*: ${order.userPhone || order.cart.userPhone}\n`;
+  message += `*Delivery Address*: ${order.userAddress || "N/A"}\n\n`;
+  message += `*Order Type*: ${order.cart.orderType || "N/A"}\n\n`;
+  if (order.userMSG) message += `*message*: ${order.userMSG || "N/A"}\n\n`;
+
+  message += `Cart Items:\n`;
+  order.cart.items.forEach((item) => {
+    message += ` - ${item.item.name} (${item.quantity}x${
+      item.item.price * 0.8
+    }) - ₹${(item.quantity * (item.item.price * 0.8)).toFixed(2)}\n`;
+  });
+
+  message += `\n*Total Price:* ₹${order.cart.totalprice.toFixed(2)}\n`;
+  return encodeURIComponent(message); // Encode message for the URL
 }
 
 ordersummary();

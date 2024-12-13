@@ -2,6 +2,7 @@ let baseURL = "http://localhost:4500";
 // let baseURL = "https://satyanaam-food-backend.onrender.com";
 let currUser = JSON.parse(localStorage.getItem("user"));
 let miniprofile;
+const whatsAppNumber = "7665770832";
 
 const tostTopEnd = Swal.mixin({
   toast: true,
@@ -359,4 +360,5 @@ export {
   cart_counter,
   loading,
   stopLoading,
+  whatsAppNumber,
 };
