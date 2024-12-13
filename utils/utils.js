@@ -1,5 +1,5 @@
-let baseURL = "http://localhost:4500";
-// let baseURL = "https://satyanaam-food-backend.onrender.com";
+// let baseURL = "http://localhost:4500";
+let baseURL = "https://satyanaam-food-backend.onrender.com";
 let currUser = JSON.parse(localStorage.getItem("user"));
 let miniprofile;
 const whatsAppNumber = "7665770832";
@@ -67,6 +67,18 @@ async function navbar() {
                           >
                             99+
                           </span>
+                </a>
+              </li>
+              <!-- Track order -->
+              <li class="nav-item track-order">
+                <a
+                  class="nav-link "
+                  href="/pages/profile.html"
+                  role="button"
+                  aria-expanded="false"
+                >
+                <i class="fa fa-box"></i>
+                  Orders
                 </a>
               </li>
               <!-- Profile Dropdown -->
@@ -338,10 +350,7 @@ async function page_footer() {
 function loading() {
   const loadingHTML = document.querySelector(".loading-screen");
   if (!loadingHTML) return;
-  loadingHTML.innerHTML = `
- <div class="loading-popup">
-    <div class="spinner"></div>
-</div>`;
+
 }
 
 function stopLoading() {
