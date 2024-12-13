@@ -44,7 +44,7 @@
   </head>
   <body>
     <header></header>
-
+    <div class="loading-screen"></div>
     <div class="profile-container">
       <div class="row">
         <div class="col-md-3">
@@ -54,24 +54,109 @@
                 <div class="osahan-user-media"></div>
               </div>
             </div>
-            <ul
-              class="nav nav-tabs flex-column border-0 pt-4 pl-4 pb-4"
-              id="myTab"
-              role="tablist"
-            >
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  id="orders-tab"
-                  data-toggle="tab"
-                  href="#orders"
-                  role="tab"
-                  aria-controls="orders"
-                  aria-selected="false"
-                  >Orders</a
-                >
-              </li>
-            </ul>
+            <div class="track container">
+              <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <div id="tracking-pre">
+                    <strong>Tracking Current Order</strong>
+                  </div>
+                  <div id="tracking">
+                    <div class="tracking-list">
+                      <div class="tracking-item-pending track-stage0">
+                        <div class="tracking-icon status-intransit">
+                          <svg
+                            class="svg-inline--fa fa-circle fa-w-16"
+                            aria-hidden="true"
+                            data-prefix="fas"
+                            data-icon="circle"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div class="tracking-content">
+                          <span>Order Confirmed</span>
+                        </div>
+                      </div>
+                      <div class="tracking-item-pending track-stage1">
+                        <div class="tracking-icon status-intransit">
+                          <svg
+                            class="svg-inline--fa fa-circle fa-w-16"
+                            aria-hidden="true"
+                            data-prefix="fas"
+                            data-icon="circle"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div class="tracking-content">
+                          <span>Order Preparing</span>
+                        </div>
+                      </div>
+                      <div class="tracking-item-pending track-stage2">
+                        <div class="tracking-icon status-intransit">
+                          <svg
+                            class="svg-inline--fa fa-circle fa-w-16"
+                            aria-hidden="true"
+                            data-prefix="fas"
+                            data-icon="circle"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div class="tracking-content">
+                          <span>on the way</span>
+                        </div>
+                      </div>
+                      <div
+                        class="tracking-item-pending visually-hidden track-stage3"
+                      >
+                        <div class="tracking-icon status-intransit">
+                          <svg
+                            class="svg-inline--fa fa-circle fa-w-16"
+                            aria-hidden="true"
+                            data-prefix="fas"
+                            data-icon="circle"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div class="tracking-content">
+                          <span>Cancelled</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-md-9">

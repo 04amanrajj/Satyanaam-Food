@@ -1,5 +1,6 @@
 import { baseURL, navbar, page_footer, tostTopEnd } from "../utils/utils.js";
 const token = localStorage.getItem("token");
+const user = JSON.parse(localStorage.getItem("person"));
 
 async function getUserInfo() {
   try {
@@ -13,7 +14,7 @@ async function getUserInfo() {
         <img
           class="mb-3 rounded-pill shadow-sm mt-1"
           src="https://bootdey.com/img/Content/avatar/avatar1.png"
-          alt="${userinfo.name}"
+          alt="${userinfo.name || user.userName}"
         />
         <div class="osahan-user-media-body">
           <h6 class="mb-2">${userinfo.name}</h6>
@@ -21,6 +22,17 @@ async function getUserInfo() {
           <p>${userinfo.email || ""}</p>
         </div>`;
   } catch (error) {
+    const userDiv = document.querySelector(".osahan-user-media");
+    userDiv.innerHTML = `
+        <img
+          class="mb-3 rounded-pill shadow-sm mt-1"
+          src="https://bootdey.com/img/Content/avatar/avatar1.png"
+          alt="${user.userName}"
+        />
+        <div class="osahan-user-media-body">
+          <h6 class="mb-2">${user.userName}</h6>
+          <p class="mb-1">${user.userPhone}</p>
+        </div>`;
     tostTopEnd.fire({
       icon: "error",
       title: error.response?.data?.message,
@@ -65,7 +77,7 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
                     ? "Total Price"
                     : "Total Paid:"
                 }</span>
-                Rs.${(orderdetails.totalprice * 0.8).toFixed(2)}
+                Rs.${orderdetails.totalprice.toFixed(2)}
               </p>
             </div>
           </div>
@@ -97,8 +109,8 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
     row.innerHTML = `
             <th scope="row">${index + 1}</th>
             <td>${ele.name}</td>
-            <td>${ele.quantity}</td>
-            <td>Rs.${(ele.price * 0.8).toFixed(2)}</td>`;
+            <td>${ele.quantity} x (${ele.price * 0.8})</td>
+            <td>Rs.${(ele.quantity * (ele.price * 0.8)).toFixed(2)}</td>`;
     tbody.appendChild(row);
   });
 
@@ -108,11 +120,16 @@ async function appendOrder(orderdetails, itemsArray, containerId) {
 
 async function getOrders() {
   try {
-    const response = await axios.get(`${baseURL}/order`, {
-      headers: { Authorization: token },
-    });
+    const response = await axios.post(
+      `${baseURL}/order`,
+      { userName: user.userName, userPhone: user.userPhone },
+      {
+        headers: { Authorization: token },
+      }
+    );
 
     const orders = response.data;
+    updateOrderTracker(orders[orders.length - 1].status);
     const currentOrderDiv = document.querySelector(".current-order");
     const completedOrderDiv = document.querySelector(".past-order");
     if (orders.length == 0) {
@@ -141,8 +158,6 @@ async function getOrders() {
         await appendOrder(orderdetails, itemsArray, "past-order");
       }
     }
-
-    console.log(orders);
   } catch (error) {
     console.error(error);
     tostTopEnd.fire({
@@ -150,6 +165,38 @@ async function getOrders() {
       title: error.response?.data?.message,
     });
   }
+}
+
+//
+const stages = {
+  0: document.querySelector(".track-stage0"),
+  1: document.querySelector(".track-stage1"),
+  2: document.querySelector(".track-stage2"),
+  3: document.querySelector(".track-stage3"),
+};
+
+const statusMapping = {
+  Pending: [0],
+  Preparing: [0, 1],
+  Prepared: [0, 1, 2],
+  Cancelled: [3],
+  Rejected: [3],
+};
+
+function updateOrderTracker(status) {
+  const activeStages = statusMapping[status];
+
+  if (status === "Cancelled") {
+    const cancelledStage = stages[3];
+    cancelledStage.classList.remove("tracking-item", "visually-hidden");
+    cancelledStage.classList.add("tracking-item");
+    return;
+  }
+  activeStages?.forEach((stageIndex) => {
+    const stage = stages[stageIndex];
+    stage.classList.add("tracking-item");
+    stage.classList.remove("tracking-item-pending");
+  });
 }
 
 getOrders();
