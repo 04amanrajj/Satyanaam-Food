@@ -57,23 +57,20 @@ async function getOrders(statusFilter = null) {
 
     const userOrders = document.querySelector(".order-container");
     userOrders.innerHTML = ""; // Clear previous orders
-    console.log(orders);
     if (orders.length === 0) {
       userOrders.innerHTML = `<strong>No orders for this stage!</strong>`;
       return;
     }
 
     let pendingOrdersCount = 0;
-    console.log(orders);
     for (const order of orders) {
-      const userResponse = await axios.post(
+      await axios.post(
         `${baseURL}/admin/user`,
         { userid: order.userID },
         {
           headers: { Authorization: token },
         }
       );
-      const user = userResponse.data.message[0];
       let statusClass;
       let grammerfix = "for";
       if (order.status === "Pending") {
@@ -211,7 +208,8 @@ async function getOrders(statusFilter = null) {
 }
 
 // Tab Navigation
-const ordersTab = document.querySelectorAll(".nav-link");
+const orderPanel = document.querySelector(".order-ul");
+const ordersTab = orderPanel.querySelectorAll(".nav-link");
 ordersTab.forEach((tab) => {
   tab.addEventListener("click", (e) => {
     e.preventDefault();
@@ -330,6 +328,11 @@ async function getItems(filters = {}) {
   }
 }
 
+document.querySelector(".add-item").addEventListener("click", (e) => {
+  console.log(e.target);
+  addItem();
+});
+
 async function toggleItemAvailability(itemId, newStatus, button) {
   try {
     await axios.patch(
@@ -350,12 +353,78 @@ async function toggleItemAvailability(itemId, newStatus, button) {
     });
   }
 }
+async function addItem() {
+  const modal = document.querySelector(".modal-body");
+  let categories = await axios.get(baseURL);
+  categories = categories.data.data.menuCategories;
 
+  modal.innerHTML = `
+    <input class="name" type="text" placeholder="Dish name" />
+    <input class="description" type="text" placeholder="dish ingrediants" />
+    <input class="image" type="text" placeholder="www.image/path/example.jpg" />
+    <input class="rating" type="number" placeholder="item-rating 1-5" min="0" max="5"/>
+    <input class="price" type="number" placeholder="99" />
+    <select class="item-category text-black">
+      ${categories
+        .map(
+          (category) =>
+            `<option class="text-black" value="${category}">${category}</option>`
+        )
+        .join("")}
+    </select>
+  `;
+
+  const save = document.querySelector(".edit-confirm");
+  save.addEventListener("click", async () => {
+    const payload = {
+      name: modal.querySelector(".name").value.trim(),
+      description: modal.querySelector(".description").value.trim(),
+      image: modal.querySelector(".image").value.trim(),
+      price: modal.querySelector(".price").value.trim(),
+      rating: modal.querySelector(".rating").value.trim(),
+      category: modal.querySelector(".item-category").value.trim(),
+    };
+
+    // Basic Validation
+    const isValid = [
+      payload.name,
+      payload.description,
+      payload.image,
+      payload.price && !isNaN(payload.price),
+      payload.rating && !isNaN(payload.rating),
+      payload.category,
+    ].every(Boolean);
+
+    if (!isValid) {
+      alert("Please fill all fields correctly.");
+      return;
+    }
+    try {
+      loading();
+      const response = await axios.post(`${baseURL}/admin/menu`, payload, {
+        headers: { Authorization: token },
+      });
+      stopLoading();
+      console.log(response);
+      tostTopEnd.fire({
+        icon: "success",
+        title: response?.data?.message || "Dish Added",
+      });
+      getItems();
+    } catch (error) {
+      stopLoading();
+      console.error(error);
+      tostTopEnd.fire({
+        icon: "error",
+        title: error.response?.data?.message || "Failed to Add",
+      });
+    }
+  });
+}
 async function editItem(item) {
   const modal = document.querySelector(".modal-body");
   let categories = await axios.get(baseURL);
   categories = categories.data.data.menuCategories;
-  console.log(categories); // Array
 
   modal.innerHTML = `
     <input class="name" type="text" placeholder="${item.name}" />
@@ -412,14 +481,30 @@ async function editItem(item) {
 
 async function removeItem(id) {
   try {
-    const response = await axios.delete(`${baseURL}/admin/menu/${id}`);
-    console.log(response);
+    const result = await Swal.fire({
+      title: "Delete item?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
+    loading();
+
+    const response = await axios.delete(`${baseURL}/admin/menu/${id}`, {
+      headers: { Authorization: token },
+    });
+    stopLoading();
     tostTopEnd.fire({
       icon: "success",
       title: response?.data?.message || "Dish removed",
     });
     getItems();
   } catch (error) {
+    stopLoading();
     console.error(error);
     tostTopEnd.fire({
       icon: "error",
