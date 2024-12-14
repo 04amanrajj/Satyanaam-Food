@@ -292,7 +292,7 @@ function sendToChat(order) {
     )}\n`;
   });
 
-  message += `\n*Total Price:* ₹_${order.cart.totalprice.toFixed(2)}_\n`;
+  message += `\n*Total Price:* ₹${order.cart.totalprice.toFixed(2)}\n`;
   return encodeURIComponent(message); // Encode message for the URL
 }
 
