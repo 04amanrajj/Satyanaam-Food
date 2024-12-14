@@ -35,8 +35,12 @@
     />
     <link rel="stylesheet" href="/styles/navbar.css" />
     <link rel="stylesheet" href="/styles/index.css" />
-    <link rel="stylesheet" href="/styles/loading.css">
-    <link rel="shortcut icon" href="/images/stc_logo2.png" type="image/x-icon">
+    <link rel="stylesheet" href="/styles/loading.css" />
+    <link
+      rel="shortcut icon"
+      href="/images/stc_logo2.png"
+      type="image/x-icon"
+    />
     <title>Home | Menu</title>
   </head>
   <body data-theme="light">
@@ -98,7 +102,6 @@
         </button>
         <button class="browse-menu-button">Browse Menu</button>
       </div>
-
       <div class="details-container"></div>
       <div class="category-row"></div>
       <div class="filter-row">
@@ -145,7 +148,26 @@
       </div>
       <div class="menu-container accordion" id="accordionPanelsStayOpen"></div>
     </div>
-
+    <div class="bottom-nav">
+      <a href="/index.html">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="/pages/profile.html">
+        <i class="fas fa-user"></i>
+        <span class="nav-username">Profile</span>
+      </a>
+      <a href="/pages/cart.html" class="position-relative">
+        <i class="fas fa-shopping-cart"></i>
+        <span
+          >Cart<span
+            class="cart-counter position-absolute top-0  start-10 visually-hidden translate-middle badge rounded-pill bg-danger"
+          >
+            99+
+          </span></span
+        >
+      </a>
+    </div>
     <!-- footer -->
     <footer class="text-center text-lg-start"></footer>
     <script type="module" src="/scripts/index.js"></script>

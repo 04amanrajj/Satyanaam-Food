@@ -157,10 +157,12 @@ async function cart_counter() {
   const userCart = JSON.parse(localStorage.getItem("cart"));
   const cartLength = userCart?.items?.length;
   if (cartLength <= 0) return;
-  const cartCounter = document.querySelector(".cart-counter");
+  const cartCounter = document.querySelectorAll(".cart-counter");
   if (cartCounter) {
-    cartCounter.textContent = cartLength;
-    cartCounter.classList.remove("visually-hidden");
+    for (const key of cartCounter) {
+      key.textContent = cartLength;
+      key.classList.remove("visually-hidden");
+    }
   }
 }
 
@@ -195,6 +197,13 @@ function loadAdmin() {
               <a class="dropdown-item logout-button" href="#"><i class="material-icons">&#xE8AC;</i> Logout</a>
             </li>
             </ul>`;
+
+  const bottomUserName = document.querySelector(".nav-username");
+  if (!bottomUserName) return;
+  bottomUserName.textContent = currUser.name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
   const logoutButton = document.querySelector(".logout-button");
   logoutButton.addEventListener("click", logout);
 }
@@ -209,7 +218,7 @@ function loadUser() {
             aria-expanded="false"
             >
             <img
-            src="https://www.tutorialrepublic.com/examples/images/avatar/2.jpg"
+            src="https://xsgames.co/randomusers/assets/avatars/pixel/3.jpg"
             class="avatar rounded-circle"
             alt="Avatar"
             width="30"
@@ -227,6 +236,12 @@ function loadUser() {
               <a class="dropdown-item logout-button" href="#"><i class="material-icons">&#xE8AC;</i> Logout</a>
             </li>
             </ul>`;
+  const bottomUserName = document.querySelector(".nav-username");
+  if (!bottomUserName) return;
+  bottomUserName.textContent = currUser.name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
   const logoutButton = document.querySelector(".logout-button");
   logoutButton.addEventListener("click", logout);
 }
@@ -402,7 +417,7 @@ function loading() {
 function stopLoading() {
   let loadingScreen = document.querySelector(".loading-screen");
   if (!loadingScreen) return;
-  loadingScreen.style.display="none";
+  loadingScreen.style.display = "none";
   loadingScreen.classList.remove("loading-screen");
 }
 export {
