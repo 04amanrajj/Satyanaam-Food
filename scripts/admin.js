@@ -328,8 +328,17 @@ async function getItems(filters = {}) {
   }
 }
 
+document.querySelector(".all-orders").addEventListener("click", (e) => {
+  document.querySelector(".show-orders").classList.add("show");
+  document.querySelector(".show-items").classList.remove("show");
+});
+
+document.querySelector(".all-items").addEventListener("click", (e) => {
+  document.querySelector(".show-orders").classList.remove("show");
+  document.querySelector(".show-items").classList.add("show");
+});
+
 document.querySelector(".add-item").addEventListener("click", (e) => {
-  console.log(e.target);
   addItem();
 });
 
@@ -379,7 +388,9 @@ async function addItem() {
     const payload = {
       name: modal.querySelector(".name").value.trim(),
       description: modal.querySelector(".description").value.trim(),
-      image: modal.querySelector(".image").value.trim(),
+      image:
+        modal.querySelector(".image").value.trim() ||
+        "https://i.pinimg.com/736x/82/a3/3a/82a33a43be59e913b58efbdfd64e281e.jpg",
       price: modal.querySelector(".price").value.trim(),
       rating: modal.querySelector(".rating").value.trim(),
       category: modal.querySelector(".item-category").value.trim(),
