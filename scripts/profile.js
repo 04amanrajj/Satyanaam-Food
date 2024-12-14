@@ -37,11 +37,11 @@ async function getUserInfo() {
         <img
           class="mb-3 rounded-pill shadow-sm mt-1"
           src="https://bootdey.com/img/Content/avatar/avatar1.png"
-          alt="${user.userName}"
+          alt="${user?.userName||"Guest"}"
         />
         <div class="osahan-user-media-body">
-          <h6 class="mb-2">${user.userName}</h6>
-          <p class="mb-1">${user.userPhone}</p>
+          <h6 class="mb-2">${user?.userName||"Guest"}</h6>
+          <p class="mb-1">${user?.userPhone||""}</p>
         </div>`;
     tostTopEnd.fire({
       icon: "error",
@@ -133,7 +133,7 @@ async function getOrders() {
     loading();
     const response = await axios.post(
       `${baseURL}/order`,
-      { userName: user.userName, userPhone: user.userPhone },
+      { userName: user?.userName, userPhone: user?.userPhone },
       {
         headers: { Authorization: token },
       }
