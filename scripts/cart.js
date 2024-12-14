@@ -243,7 +243,7 @@ async function ordersummary() {
         localStorage.removeItem("cart");
       });
     } catch (error) {
-    stopLoading();
+      stopLoading();
       console.error(error);
       tostTopEnd.fire({
         icon: "error",
@@ -280,17 +280,19 @@ function sendToChat(order) {
   message += `*Customer Name*: ${order.userName || order.cart.userName}\n`;
   message += `*Customer Phone*: ${order.userPhone || order.cart.userPhone}\n`;
   message += `*Delivery Address*: ${order.userAddress || "N/A"}\n\n`;
-  message += `*Order Type*: ${order.cart.orderType || "N/A"}\n\n`;
+  message += `*Order Type*: ${order.cart.orderType || "Pick Up"}\n\n`;
   if (order.userMSG) message += `*message*: ${order.userMSG || "N/A"}\n\n`;
 
   message += `Cart Items:\n`;
   order.cart.items.forEach((item) => {
-    message += ` - ${item.item.name} (${item.quantity}x${
+    message += ` - ${item.item.name} (${item.quantity}x${(
       item.item.price * 0.8
-    }) - ₹${(item.quantity * (item.item.price * 0.8)).toFixed(2)}\n`;
+    ).toFixed(2)}) - ₹${(item.quantity * (item.item.price * 0.8)).toFixed(
+      2
+    )}\n`;
   });
 
-  message += `\n*Total Price:* ₹${order.cart.totalprice.toFixed(2)}\n`;
+  message += `\n*Total Price:* ₹_${order.cart.totalprice.toFixed(2)}_\n`;
   return encodeURIComponent(message); // Encode message for the URL
 }
 
@@ -298,4 +300,4 @@ ordersummary();
 navbar();
 page_footer();
 cart_counter();
-    stopLoading();
+stopLoading();
