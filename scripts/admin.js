@@ -199,7 +199,7 @@ async function getOrders(statusFilter = null) {
     stopLoading();
     const userOrders = document.querySelector(".order-container");
     userOrders.innerHTML = `<strong>No orders for this stage!</strong>`;
-    console.error(error);
+    console.error(error.message);
     tostTopEnd.fire({
       icon: "error",
       title: error.response?.data?.message || "An error occurred",
@@ -208,17 +208,23 @@ async function getOrders(statusFilter = null) {
 }
 
 // Tab Navigation
-const orderPanel = document.querySelector(".order-ul");
-const ordersTab = orderPanel.querySelectorAll(".nav-link");
+const ordersTab = document.querySelectorAll(".ordertab");
 ordersTab.forEach((tab) => {
   tab.addEventListener("click", (e) => {
     e.preventDefault();
 
-    ordersTab.forEach((t) => t.classList.remove("active"));
-    tab.classList.add("active");
-
     const stage = tab.getAttribute("data-stage");
     getOrders(stage);
+  });
+});
+
+const navlink = document.querySelectorAll(".nav-link");
+navlink.forEach((tab) => {
+  tab.addEventListener("click", (e) => {
+    e.preventDefault();
+    
+    navlink.forEach((t) => t.classList.remove("active"));
+    tab.classList.add("active");
   });
 });
 
