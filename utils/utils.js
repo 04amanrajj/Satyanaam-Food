@@ -410,12 +410,17 @@ function loading() {
 		<g class="pl__pan">
 			<rect rx="2" ry="2" x="4" y="66" width="68" height="14" clip-path="url(#pan-clip)" id="pan" />
 			<rect rx="2" ry="2" x="76" y="66" width="48" height="7" />
-		</g>
-		<rect class="pl__shadow" fill="hsla(223,10%,50%,0.2)" rx="3.5" ry="3.5" x="10" y="121" width="60" height="7" />
-	</g>
-</svg>`;
-}
+      </g>
+      <rect class="pl__shadow" fill="hsla(223,10%,50%,0.2)" rx="3.5" ry="3.5" x="10" y="121" width="60" height="7" />
+      </g>
+      </svg>
+      <p class="loadmsg" style="position: fixed; top: 62%; margin: auto; display: flex; justify-content: center; width: 97%;">Loading...</p>`;
 
+  const checkLS = localStorage.getItem("user");
+  if (!checkLS)
+    document.querySelector(".loadmsg").textContent =
+      "First-time load may take a few seconds";
+}
 function stopLoading() {
   let loadingScreen = document.querySelector(".loading-screen");
   if (!loadingScreen) return;
