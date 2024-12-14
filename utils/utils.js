@@ -103,7 +103,7 @@ async function navbar() {
                   </li>
                   <li>
                     <a
-                      class="dropdown-item logout-button"
+                      class="dropdown-item"
                       href="/pages/signup.html"
                     >
                       <i class="fas fa-user-plus"></i> Signup
@@ -199,11 +199,12 @@ function loadAdmin() {
             </ul>`;
 
   const bottomUserName = document.querySelector(".nav-username");
-  if (!bottomUserName) return;
-  bottomUserName.textContent = currUser.name
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  if (bottomUserName) {
+    bottomUserName.textContent = currUser.name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
   const logoutButton = document.querySelector(".logout-button");
   logoutButton.addEventListener("click", logout);
 }
@@ -237,11 +238,12 @@ function loadUser() {
             </li>
             </ul>`;
   const bottomUserName = document.querySelector(".nav-username");
-  if (!bottomUserName) return;
-  bottomUserName.textContent = currUser.name
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  if (bottomUserName) {
+    bottomUserName.textContent = currUser.name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
   const logoutButton = document.querySelector(".logout-button");
   logoutButton.addEventListener("click", logout);
 }
@@ -261,7 +263,7 @@ async function logout() {
     });
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setTimeout(() => location.reload(), 2000);
+    setTimeout(() => (window.location.href = "/index.html"), 2000);
   } catch (error) {
     console.error(error);
     tostTopEnd.fire({
