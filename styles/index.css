@@ -372,6 +372,12 @@ iframe {
 .accordion-item:first-of-type {
   border-radius: 20px;
 }
+
+.accordion-item:last-of-type > .accordion-header .accordion-button.collapsed {
+  border-bottom-right-radius:20px;
+  border-bottom-left-radius:20px;
+}
+
 .accordion-item {
   border: none !important;
 }
@@ -388,7 +394,7 @@ iframe {
   display: flex;
   background: var(--bg-primary);
   justify-content: space-between;
-  width: max-content;
+  width: 100%;
   font-weight: bold;
   font-size: 1.2rem;
   padding: 10px 15px;
@@ -400,6 +406,7 @@ iframe {
 }
 
 .accordion-header {
+  min-width: 10%;
   width: max-content;
   margin: 0;
   margin-left: 2%;
@@ -726,9 +733,8 @@ iframe {
     margin-left: 20px;
   }
 
-  footer{
+  footer {
     margin-bottom: 15%;
-
   }
 
   .bottom-nav {
