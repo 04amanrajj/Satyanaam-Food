@@ -24,7 +24,7 @@ async function restaurent_info() {
   <div class="features">
     <div class="feature-item">
       <p class="restaurant-features">Pure Veg</p>
-      <p class="feature-value">${restaurent.features.pureVeg}</p>
+      <p class="feature-value">${restaurent.features.pureVeg?"Yes":"No"}</p>
     </div>
     <div class="feature-item">
       <p class="restaurant-features">Authentic Taste</p>
@@ -63,7 +63,7 @@ async function restaurent_info() {
           restaurent.address.line1
         },${restaurent.address.city},${restaurent.address.state},${
       restaurent.address.zipcode
-    }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=19"allowfullscreen>
+    }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=17"allowfullscreen>
       </iframe>
     </div>
   </div>
@@ -196,7 +196,7 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     });
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
-
+console.log(menuItems);
     // group items by category
     const categories = {};
     menuItems.forEach((item) => {
