@@ -173,6 +173,7 @@ async function ordersummary() {
         <p><strong>CONTACT DETAILS</strong></p>
         <input type="text" id="full-name" name="fullName" placeholder="Full Name" required />
         <input type="tel" id="contact-number" name="contactNumber" placeholder="Contact Number" required />
+        <input type="email" id="email" name="email" placeholder="Email" />
 
         <p><strong>CUSTOM MESSAGE</strong> (Optional)</p>
         <textarea id="custom-message" name="customMessage" placeholder="Add instructions or notes for the delivery" rows="2"></textarea>
@@ -203,6 +204,7 @@ async function ordersummary() {
       const userName = document.getElementById("full-name").value.trim();
       const userPhone = document.getElementById("contact-number").value.trim();
       const userMSG = document.getElementById("custom-message").value.trim();
+      const userMail = document.getElementById("email").value.trim();
       const person = { userName, userPhone };
 
       // Validate inputs
@@ -219,6 +221,12 @@ async function ordersummary() {
       cart.totalprice *= 0.8;
       let confirmOrder = { cart, userName, userPhone, userAddress };
       if (userMSG) confirmOrder.userMSG = userMSG;
+      if (!userMail) {
+        const loggedUser = JSON.parse(localStorage.getItem("user"));
+        if (loggedUser && loggedUser.email)
+          confirmOrder.userMail = loggedUser.email;
+      } else confirmOrder.userMail = userMail;
+
       confirmOrder.homeDelivery =
         cart.orderType === "Home Delivery" ? true : false;
 
