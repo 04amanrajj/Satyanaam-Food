@@ -157,7 +157,7 @@ body {
 /* footer */
 
 footer {
-  color: var(--secondary-text-color);
+  color: var(--primary-text-color);
   background-color: var(--bg-accent);
 }
 .mt-4 {
@@ -173,12 +173,12 @@ footer .btn-lg {
   padding: 10px;
   height: min-content;
   width: min-content;
-  color: var(--secondary-text-color);
+  color: var(--primary-text-color);
   background-color: transparent;
   border: none;
 }
 footer .btn-lg:hover {
-  color: var(--primary-text-color);
+  color: var(--secondary-text-color);
 }
 
 footer a {

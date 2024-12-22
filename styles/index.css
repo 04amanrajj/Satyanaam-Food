@@ -374,8 +374,8 @@ iframe {
 }
 
 .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed {
-  border-bottom-right-radius:20px;
-  border-bottom-left-radius:20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 .accordion-item {
@@ -696,6 +696,7 @@ iframe {
   }
 
   .item-description {
+    white-space: wrap;
     font-size: 0.9rem;
     color: --bg-primary;
     margin: 0;
@@ -704,7 +705,7 @@ iframe {
     font-size: 1rem;
     font-weight: bold;
     color: whitesmoke;
-    margin: 5px 0 0 0;
+    margin: 0;
   }
 
   .item .item-og-price {

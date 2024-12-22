@@ -24,7 +24,7 @@ async function restaurent_info() {
   <div class="features">
     <div class="feature-item">
       <p class="restaurant-features">Pure Veg</p>
-      <p class="feature-value">${restaurent.features.pureVeg?"Yes":"No"}</p>
+      <p class="feature-value">${restaurent.features.pureVeg ? "Yes" : "No"}</p>
     </div>
     <div class="feature-item">
       <p class="restaurant-features">Authentic Taste</p>
@@ -57,18 +57,31 @@ async function restaurent_info() {
 <div>
   <div class="map-container">
     <div id="embed-map-display">
-      <iframe
-        frameborder="0"
-        src="https://www.google.com/maps/embed/v1/place?q=${
-          restaurent.address.line1
-        },${restaurent.address.city},${restaurent.address.state},${
-      restaurent.address.zipcode
-    }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=17"allowfullscreen>
-      </iframe>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d904.4130984802746!2d73.824053!3d24.943909!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39680d005b02db7f%3A0xc9cc198672b0269d!2sSrinath%20dham!5e0!3m2!1sen!2sus!4v1734886482424!5m2!1sen!2sus"
+      width="400"
+      height="300"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      zoom="17"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
     </div>
   </div>
 </div>
 `;
+
+    // Dynamic address data
+    // <iframe
+    //   frameborder="0"
+    //   src="https://www.google.com/maps/embed/v1/place?q=${
+    //   restaurent.address.line1
+    //   },${restaurent.address.city},${restaurent.address.state},${
+    //   restaurent.address.zipcode
+    //   }&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&zoom=17"
+    //   allowfullscreen
+    // ></iframe>
 
     // category row
     response.data.data.menuCategories.unshift("All");
@@ -196,7 +209,7 @@ async function restaurent_menu(pagenumber = 1, params = {}) {
     });
     if (response.data.data.length == 0) restaurent_menu();
     const menuItems = response.data.data || [];
-console.log(menuItems);
+    console.log(menuItems);
     // group items by category
     const categories = {};
     menuItems.forEach((item) => {
