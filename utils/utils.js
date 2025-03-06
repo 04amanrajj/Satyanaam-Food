@@ -1,5 +1,6 @@
 // let baseURL = "http://localhost:4500";
-let baseURL = "https://satyanaam-food-backend.onrender.com";
+// let baseURL = "https://satyanaam-food-backend.onrender.com";
+let baseURL = "https://satyanaam-food-backend.up.railway.app";
 let currUser = JSON.parse(localStorage.getItem("user"));
 let miniprofile;
 const whatsAppNumber = "7665770832";
