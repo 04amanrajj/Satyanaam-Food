@@ -289,8 +289,11 @@ footer a {
   --trans-dur: 0.3s;
 }
 
+g {
+  color: var(--primary-text-color) !important;
+}
 .loading-screen {
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
   color: var(--fg);
   display: flex;
   font: 1em/1.5 sans-serif;
